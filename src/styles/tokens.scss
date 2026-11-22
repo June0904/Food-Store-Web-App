@@ -1,0 +1,264 @@
+@import "bootstrap/scss/bootstrap";
+
+:root,
+[data-bs-theme="dark"] {
+  --md-canvas: #121412;
+  --md-surface: #1B1E1B;
+  --md-surface-2: #242823;
+  --md-surface-glass: rgba(27, 30, 27, 0.82);
+  --md-line: #343A33;
+  --md-text: #F4F2EA;
+  --md-text-muted: #A9AEA3;
+  --md-moss: #8FB36B;
+  --md-moss-strong: #A7C685;
+  --md-moss-deep: #4F6F37;
+  --md-on-moss: #121412;
+  --md-danger: #F2B8B5;
+  --md-warning: #E6C36A;
+  --md-watermark: rgba(244, 242, 234, 0.06);
+  --md-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+}
+
+[data-bs-theme="light"] {
+  --md-canvas: #FBFAF5;
+  --md-surface: #FFFFFF;
+  --md-surface-2: #F1EFE6;
+  --md-surface-glass: rgba(255, 255, 255, 0.88);
+  --md-line: #D9D6C8;
+  --md-text: #121412;
+  --md-text-muted: #5A5F57;
+  --md-moss: #4F6F37;
+  --md-moss-strong: #3F5A2C;
+  --md-moss-deep: #3F5A2C;
+  --md-on-moss: #FBFAF5;
+  --md-danger: #B3261E;
+  --md-warning: #8A6100;
+  --md-watermark: rgba(18, 20, 18, 0.065);
+  --md-shadow: 0 14px 34px rgba(18, 20, 18, 0.08);
+}
+
+body {
+  background-color: var(--md-canvas);
+  color: var(--md-text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+/* Reference 1: INSTANT Photo Studio - Hairline Framed Titles & 2x2 Tiles & Underline Form */
+.md-instant-heading {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
+}
+
+.md-instant-heading::before,
+.md-instant-heading::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 1px;
+  background-color: var(--md-moss);
+}
+
+.md-instant-tile {
+  position: relative;
+  min-height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--md-line);
+  background: radial-gradient(circle at center, var(--md-surface-2), var(--md-canvas));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.md-instant-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--md-moss);
+}
+
+.md-underline-input {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--md-moss) !important;
+  border-radius: 0 !important;
+  color: var(--md-text) !important;
+  text-align: center;
+  padding: 0.7rem 0.5rem !important;
+}
+
+.md-underline-input:focus {
+  box-shadow: none !important;
+  border-bottom-width: 2px !important;
+}
+
+/* Reference 2: HARVEST Bakery - Serif Editorial Display, Pill CTA, Quality Stamp, 3-Icon Strip */
+.md-serif-display {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.md-condensed-display {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.md-moss-accent {
+  color: var(--md-moss);
+}
+
+.md-btn-pill {
+  background-color: var(--md-moss);
+  color: var(--md-on-moss);
+  border: 1px solid var(--md-moss);
+  border-radius: 999px;
+  padding: 0.65rem 1.45rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.md-btn-pill:hover {
+  background-color: var(--md-moss-strong);
+  border-color: var(--md-moss-strong);
+  color: var(--md-on-moss);
+  transform: translateY(-1px);
+}
+
+.md-btn-ghost {
+  background: transparent;
+  color: var(--md-text);
+  border: 1px solid var(--md-line);
+  border-radius: 999px;
+  padding: 0.6rem 1.3rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.md-btn-ghost:hover {
+  border-color: var(--md-moss);
+  color: var(--md-moss);
+}
+
+.md-stamp-badge {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--md-moss);
+  background: var(--md-surface-glass);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: var(--md-shadow);
+}
+
+/* Reference 3 & 4: GAZU & NORD - Giant Wordmark Backdrop & Dark 3-Column Strip */
+.md-wordmark-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--md-line);
+  background: var(--md-surface);
+  padding: 2.5rem 1.75rem;
+}
+
+.md-giant-wordmark {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(4.2rem, 13vw, 9.5rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 0.9;
+  color: var(--md-watermark);
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.md-dark-contrast-strip {
+  background-color: #121412;
+  color: #F4F2EA;
+  border-radius: 14px;
+  border: 1px solid #343A33;
+  padding: 1.5rem;
+}
+
+/* Live Plate / Bowl / Bento-Box Stage */
+.md-plate-stage {
+  position: relative;
+  width: 310px;
+  height: 310px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.md-vessel-ceramic-plate {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #2B302A, #161916 72%);
+  border: 8px solid #3A4138;
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.65), 0 18px 36px rgba(0, 0, 0, 0.4);
+}
+
+.md-vessel-wooden-bowl {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #382E22, #221B14 75%);
+  border: 10px solid #524331;
+  box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.7), 0 18px 36px rgba(0, 0, 0, 0.45);
+}
+
+.md-vessel-bento-box {
+  border-radius: 26px;
+  background: linear-gradient(145deg, #1E221D, #131613);
+  border: 8px solid #4F6F37;
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.75), 0 18px 36px rgba(0, 0, 0, 0.45);
+}
+
+.md-plate-ingredient-chip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--md-surface-glass);
+  border: 2px solid var(--md-moss);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  padding: 4px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.md-surface-card {
+  background-color: var(--md-surface);
+  border: 1px solid var(--md-line);
+  border-radius: 14px;
+  box-shadow: var(--md-shadow);
+}
