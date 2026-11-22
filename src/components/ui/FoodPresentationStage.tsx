@@ -23,7 +23,7 @@ export function FoodPresentationStage({ dish, selectedIds, isDismantled, onToggl
   const layers = selectedIds
     .map((id) => INGREDIENTS_DB[id])
     .filter(Boolean)
-    .sort((a, b) => (ORDER_WEIGHT[a.category] ?? 3) - (ORDER_WEIGHT[b.category] ?? 3));
+    .sort((a, b) => (ORDER_WEIGHT[a.folderPath.split("/")[1]] ?? 3) - (ORDER_WEIGHT[b.folderPath.split("/")[1]] ?? 3));
 
   return (
     <div className="mb-3">
@@ -118,7 +118,7 @@ export function FoodPresentationStage({ dish, selectedIds, isDismantled, onToggl
                           maxWidth: "36%",
                         }}>
                         <div className="fw-bold text-truncate">{ing.name}</div>
-                        <div style={{ color: "#8FB36B", fontSize: "0.66rem" }}>{ing.grams}g &bull; +&#8369;{ing.pricePhp}</div>
+                        <div style={{ color: "#8FB36B", fontSize: "0.66rem" }}>{ing.kcal} kcal &bull; +&#8369;{ing.pricePhp}</div>
                       </div>
                     </motion.div>
                   );

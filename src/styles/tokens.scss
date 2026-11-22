@@ -389,3 +389,5 @@ html, body, #root {
 @keyframes mdLoaderFadeOut { 0%, 60% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 .md-transition-loader { animation: mdLoaderFadeOut 0.48s ease forwards; }
 .md-tossed-plate .md-plate-ingredient-chip { transform: translate(-50%, -50%) scale(1.18) rotate(-6deg) !important; }
+/* ProductCustomizerHideLegacy */
+.col-lg-5 .md-plate-stage { display: none !important; }
