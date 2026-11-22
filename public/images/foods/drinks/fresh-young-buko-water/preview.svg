@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
-  <rect width='240' height='240' rx='32' fill='#261B2B' stroke='#C592E8' stroke-width='3'/>
-  <circle cx='120' cy='98' r='54' fill='#141714' stroke='#C592E8' stroke-width='2'/>
-  <ellipse cx='106' cy='92' rx='24' ry='16' fill='#F2B749'/>
-  <circle cx='135' cy='105' r='16' fill='#9B6BBE'/>
-  <circle cx='114' cy='114' r='10' fill='#8FB36B'/>
-  <rect x='20' y='168' width='200' height='48' rx='10' fill='#121412' opacity='0.88'/>
-  <text x='120' y='188' text-anchor='middle' fill='#F4F2EA' font-family='sans-serif' font-size='10' font-weight='700'>FRESH YOUNG BUKO WATER</text>
-  <text x='120' y='205' text-anchor='middle' fill='#C592E8' font-family='sans-serif' font-size='8' font-weight='600'>FOODS / DRINKS</text>
-</svg>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect width='400' height='400' rx='36' fill='#221E1A'/><circle cx='200' cy='208' r='168' fill='#000000' fill-opacity='0.28'/><rect x='115' y='48' width='170' height='304' rx='34' fill='#6E9945' fill-opacity='0.28' stroke='#E8E4D9' stroke-width='4'/><rect x='127' y='88' width='146' height='250' rx='24' fill='#B84B39' fill-opacity='0.82'/><rect x='148' y='115' width='42' height='42' rx='10' fill='#FFFFFF' fill-opacity='0.45' transform='rotate(12 169 136)'/><rect x='205' y='150' width='38' height='38' rx='10' fill='#FFFFFF' fill-opacity='0.4' transform='rotate(-15 224 169)'/><circle cx='245' cy='92' r='34' fill='#E89923' stroke='#FBFAF5' stroke-width='4'/><ellipse cx='165' cy='90' rx='26' ry='12' fill='#4F772D' transform='rotate(-22 165 90)'/></svg>
