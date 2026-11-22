@@ -290,3 +290,102 @@ html, body, #root {
   border-right: 1px solid var(--md-line);
   min-height: 100vh;
 }
+@keyframes mdFloatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes mdPulseRing {
+  0% { transform: scale(0.92); opacity: 0.85; }
+  50% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(0.92); opacity: 0.85; }
+}
+
+@keyframes mdPageEnter {
+  from { opacity: 0; transform: translateY(14px) scale(0.992); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.md-page-stage {
+  animation: mdPageEnter 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.md-surface-card,
+.md-instant-tile {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+.md-surface-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--md-moss);
+  box-shadow: 0 20px 38px rgba(0, 0, 0, 0.28);
+}
+
+.md-surface-card img {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.md-surface-card:hover img {
+  transform: scale(1.05);
+}
+
+.md-btn-pill,
+.md-btn-ghost {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-btn-pill:hover,
+.md-btn-ghost:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.md-btn-pill:active,
+.md-btn-ghost:active {
+  transform: scale(0.96);
+}
+
+.md-plate-stage {
+  animation: mdFloatSlow 5.5s ease-in-out infinite;
+}
+
+.md-plate-ingredient-chip:hover {
+  transform: scale(1.16) rotate(-3deg);
+  border-color: var(--md-moss-strong);
+  z-index: 20 !important;
+}
+
+.md-transition-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.md-transition-bar {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--md-moss), var(--md-moss-strong), transparent);
+}
+
+.md-transition-pill {
+  align-self: center;
+  margin-top: 72px;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  background: var(--md-surface-glass);
+  border: 1px solid var(--md-moss);
+  box-shadow: var(--md-shadow);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  animation: mdPulseRing 0.6s ease-in-out infinite;
+}
+@keyframes mdLoaderFadeOut { 0%, 60% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+.md-transition-loader { animation: mdLoaderFadeOut 0.48s ease forwards; }
+.md-tossed-plate .md-plate-ingredient-chip { transform: translate(-50%, -50%) scale(1.18) rotate(-6deg) !important; }

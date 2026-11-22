@@ -20,6 +20,8 @@ export function DeliveryTrackerPage() {
   const { deliveryHistory, deviceCoords, markOrderDelivered, addReview } = useAppStore();
 
   const order = deliveryHistory.find((o) => o.orderId === orderId) ?? deliveryHistory[0];
+  const targetOrderId = order?.orderId;
+  const targetStatus = order?.status;
   const [stageIdx, setStageIdx] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(5);
   const [serviceRating, setServiceRating] = useState(5);
@@ -28,7 +30,7 @@ export function DeliveryTrackerPage() {
 
   useEffect(() => {
     if (stageIdx >= STAGES.length - 1) {
-      if (order && order.status !== 'Delivered') markOrderDelivered(order.orderId);
+      if (targetOrderId && targetStatus !== 'Delivered') markOrderDelivered(targetOrderId);
       return;
     }
     const timer = setInterval(() => {
@@ -41,7 +43,7 @@ export function DeliveryTrackerPage() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [stageIdx, order?.orderId, order?.status, markOrderDelivered]);
+  }, [stageIdx, targetOrderId, targetStatus, markOrderDelivered]);
 
   if (!order) return null;
 

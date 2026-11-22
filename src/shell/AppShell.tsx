@@ -1,3 +1,4 @@
+import { sfx } from "../lib/soundEffects";
 import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Container, Navbar, Offcanvas, Modal, Badge, Form, Row, Col } from "react-bootstrap";
@@ -23,7 +24,7 @@ export function AppShell() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [navDrawerOpen, setNavDrawerOpen] = useState(false);
+  const [navDrawerOpen, setNavDrawerOpen] = useState(false); const [soundOn, setSoundOn] = useState(true);
   const [selectedAddrId, setSelectedAddrId] = useState(addresses[0]?.id ?? "");
   const [addingNewAddr, setAddingNewAddr] = useState(false);
   const [newRegion, setNewRegion] = useState("Region VI (Western Visayas)");
@@ -34,6 +35,18 @@ export function AppShell() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-bs-theme", theme);
+  }, [theme]);
+  useEffect(() => { sfx.click(); }, [location.pathname]);
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement | null)?.closest("button, a, [role='button']")) sfx.click();
+    };
+    const onOver = (e: MouseEvent) => {
+      if ((e.target as HTMLElement | null)?.closest("button, a, [role='button'], .md-surface-card")) sfx.hover();
+    };
+    document.addEventListener("click", onClick);
+    document.addEventListener("mouseover", onOver);
+    return () => { document.removeEventListener("click", onClick); document.removeEventListener("mouseover", onOver); };
   }, [theme]);
 
   const cartCount = cart.reduce((s, l) => s + l.quantity, 0);
@@ -137,7 +150,7 @@ export function AppShell() {
           </Link>
 
           <div className="d-flex align-items-center gap-2">
-            <Badge bg="secondary" className="d-none d-md-inline">{sessionMode === "guest" ? "Guest" : "Account"}</Badge>
+            <button type="button" className="md-btn-ghost py-1 px-2 small" onClick={() => { const next = !soundOn; setSoundOn(next); sfx.setEnabled(next); }}>{soundOn ? "SFX ON" : "SFX MUTE"}</button><Badge bg="secondary" className="d-none d-md-inline">{sessionMode === "guest" ? "Guest" : "Account"}</Badge>
             <button type="button" className="md-btn-ghost p-2" aria-label="Toggle theme" onClick={toggleTheme}>
               {theme === "dark" ? <SunFill size={17} /> : <MoonStarsFill size={17} />}
             </button>
@@ -152,7 +165,7 @@ export function AppShell() {
         </Container>
       </Navbar>
 
-      <main className="flex-grow-1">
+      <div key={"loader-" + location.pathname} className="md-transition-loader"><div className="md-transition-bar" /><div className="md-transition-pill">Preparing View...</div><div /></div><main key={location.pathname} className="flex-grow-1 md-page-stage">
         <Outlet />
       </main>
 

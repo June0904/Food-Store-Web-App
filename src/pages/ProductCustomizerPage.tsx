@@ -1,3 +1,5 @@
+import { AnimatedStepper } from "../components/ui/AnimatedStepper";
+import { sfx } from "../lib/soundEffects";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Badge } from "react-bootstrap";
@@ -15,7 +17,7 @@ export function ProductCustomizerPage() {
   const dish = MENU_ITEMS.find((m) => m.slug === slug) ?? MENU_ITEMS[0];
   const [vessel, setVessel] = useState<VesselType>(dish.vessel);
   const [selectedIds, setSelectedIds] = useState<string[]>(dish.defaultIngredientIds);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1); const [isTossed, setIsTossed] = useState(false);
   const [guardMsg, setGuardMsg] = useState<string | null>(null);
 
   const totals = calculateDishTotals(dish, selectedIds, quantity);
@@ -49,7 +51,7 @@ export function ProductCustomizerPage() {
       vessel, selectedIngredientIds: selectedIds, customSummary: summary,
       unitPricePhp: totals.unitPricePhp, kcal: totals.kcal, quantity,
     });
-    setCartOpen(true);
+    sfx.success(); setCartOpen(true);
     navigate(`/menu/${dish.category}`);
   };
 
@@ -180,7 +182,7 @@ export function ProductCustomizerPage() {
                 <button type="button" className="md-btn-ghost flex-grow-1" onClick={() => navigate(`/menu/${dish.category}`)}>
                   Cancel
                 </button>
-                <button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart} disabled={isUnavailable} style={{ opacity: isUnavailable ? 0.5 : 1 }}>
+                <div className="d-flex flex-wrap align-items-center gap-2 me-2"><AnimatedStepper value={quantity} onChange={setQuantity} min={1} max={20} /><button type="button" className="md-btn-ghost py-1 px-3 small" onClick={() => { sfx.toss(); setIsTossed((v) => !v); }}>{isTossed ? "Gather Plate" : "Toss Plate Apart"}</button></div><button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart} disabled={isUnavailable} style={{ opacity: isUnavailable ? 0.5 : 1 }}>
                   {isUnavailable ? "Currently Unavailable" : <><BagPlusFill /> Add to Cart (&#8369;{totals.totalPricePhp})</>}
                 </button>
               </div>
