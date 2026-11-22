@@ -1,32 +1,27 @@
-# React + TypeScript + Vite
+# Moss & Daisy — Bespoke Filipino Healthy Food Store Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**University of San Agustin — IT314 Lab Group Project**
+**Repository:** `https://github.com/June0904/Food-Store-Web-App.git`
 
-Currently, two official plugins are available:
+## Project Team
+- **Ilczar June D. Madredano** — *Backend & Front End*
+- **Monica Sophia P. Arabaca** — *Design & Data Analyst*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Contact & Store Information
+- **Email:** `ilczar9@gmail.com`
+- **Phone:** `09458269961`
+- **Location:** General Luna St., Iloilo City / BGC High Street Kitchen Hub
 
-## React Compiler
+## Key Features
+1. **Headerless Full-Screen Get Started Page (`/`)** with RA 10173 Privacy & GPS Disclosure, New-Device Account Choice, and Star Ratings.
+2. **18 Customizable Filipino Healthy Dishes & Drinks + 61 Researched Ingredients** with live PHP pricing (`basePrepPhp + ingredients`) and real-time USDA/PhilFCT calorie & macro updates.
+3. **Interactive Live Plate / Wooden Bowl / Bento Box Display** with **Toss Plate Apart** explosion animation, **Smart Healthy Swaps**, and `motion/react` **Animated Number Stepper**.
+4. **Food Available / Unavailable System** with live status badges and a **Kitchen Demo Toggle** on `/menu`.
+5. **Device Location Check + 5-Stage Auto-Cycling Live Order & Driver Tracker (`/delivery/:orderId`)** showing live moving rider GPS (`Kuya Noel Villanueva`, `Honda Click 125i`, Plate `WV-4829-PH`) and 5-Star Service Rating prompt upon delivery.
+6. **Zero-Latency Web Audio System Sound Engine (`src/lib/soundEffects.ts`)**, Route Transition Loader, and Soft High-Contrast Light/Dark Mode.
+7. **84 Named Image Folders (`public/images/`)**: Drop any `.png`/`.jpg`/`.webp` into a folder and run `.\sync-images.ps1` to swap food/ingredient visuals anytime.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Quick Commands
+- Start dev server: `npm run dev`
+- Run full project verification: `powershell -ExecutionPolicy Bypass -File .\recheck.ps1`
+- Sync custom folder images: `powershell -ExecutionPolicy Bypass -File .\sync-images.ps1`
