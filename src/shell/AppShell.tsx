@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Container, Navbar, Nav, Offcanvas, Modal, Badge, Form, Row, Col } from "react-bootstrap";
+import { Container, Navbar, Offcanvas, Modal, Badge, Form, Row, Col } from "react-bootstrap";
 import {
   List, ArrowLeft, SunFill, MoonStarsFill, PersonCircle,
-  BagCheckFill, GeoAltFill, ClockHistory, HouseDoorFill, GridFill, Trash,
+  BagCheckFill, GeoAltFill, ClockHistory, HouseDoorFill, GridFill, Trash, ExclamationTriangleFill, CheckCircleFill,
 } from "react-bootstrap-icons";
 import { useAppStore } from "../store/useAppStore";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -15,6 +15,7 @@ export function AppShell() {
     cart, cartOpen, setCartOpen, updateCartQty, removeFromCart,
     addresses, addAddress, confirmAddressOpen, setConfirmAddressOpen,
     confirmAndDeliverOrder, sessionMode,
+    deviceLocationEnabled, deviceCoords, setDeviceLocation,
   } = useAppStore();
 
   const screenIsMobile = useIsMobile();
@@ -29,7 +30,7 @@ export function AppShell() {
   const [newCity, setNewCity] = useState("Iloilo City");
   const [newBrgy, setNewBrgy] = useState("");
   const [newStreet, setNewStreet] = useState("");
-  const [orderSuccessMsg, setOrderSuccessMsg] = useState<string | null>(null);
+  const [locError, setLocError] = useState<string | null>(null);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-bs-theme", theme);
@@ -38,6 +39,26 @@ export function AppShell() {
   const cartCount = cart.reduce((s, l) => s + l.quantity, 0);
   const cartSubtotal = cart.reduce((s, l) => s + l.unitPricePhp * l.quantity, 0);
   const deliveryFee = cartSubtotal >= 499 || cartSubtotal === 0 ? 0 : 45;
+
+  const handleTurnOnLocation = () => {
+    setLocError(null);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setDeviceLocation(true, {
+            lat: Number(pos.coords.latitude.toFixed(4)),
+            lng: Number(pos.coords.longitude.toFixed(4)),
+          });
+        },
+        () => {
+          setDeviceLocation(true, { lat: 10.6969, lng: 122.5644 });
+        },
+        { timeout: 4000 }
+      );
+    } else {
+      setDeviceLocation(true, { lat: 10.6969, lng: 122.5644 });
+    }
+  };
 
   const handleSaveNewAddress = () => {
     if (!newBrgy.trim() || !newStreet.trim()) return;
@@ -52,11 +73,14 @@ export function AppShell() {
   };
 
   const handleConfirmDelivery = () => {
+    if (!deviceLocationEnabled) {
+      setLocError("Please turn on your device location first so our rider can navigate to your drop-off address.");
+      return;
+    }
     const addrId = selectedAddrId || addresses[0]?.id;
     const rec = confirmAndDeliverOrder(addrId);
     if (rec) {
-      setOrderSuccessMsg(`Order ${rec.orderId} confirmed for delivery to ${rec.address.barangay}, ${rec.address.city}!`);
-      navigate("/profile");
+      navigate(`/delivery/${rec.orderId}`);
     }
   };
 
@@ -65,18 +89,17 @@ export function AppShell() {
     { to: "/menu", label: "Shop / Menu" },
     { to: "/about", label: "About" },
     { to: "/contact", label: "Contact Us" },
-    { to: "/profile", label: "Profile & History" },
+    { to: "/profile", label: "Profile & Delivery History" },
     { to: "/settings", label: "Settings" },
   ];
 
   return (
-    <div className="min-vh-100 d-flex flex-column $(isMobile ? 'md-mobile-frame' : 'w-100')" style={{ paddingBottom: isMobile ? "72px" : "0" }}>
-      {/* Top Utility & Device Preview Switcher Bar */}
-      <div className="py-1 px-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2"
+    <div className={`min-vh-100 d-flex flex-column ${isMobile ? "md-mobile-frame" : "w-100"}`} style={{ paddingBottom: isMobile ? "72px" : "0" }}>
+      <div className="py-1 px-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2"
         style={{ backgroundColor: "#121412", color: "#F4F2EA", borderColor: "#343A33", fontSize: "0.73rem" }}>
         <span>FREE DELIVERY ON HEALTHY ORDERS ABOVE &#8369;499 &bull; ILOILO &amp; NATIONWIDE PH</span>
         <div className="d-flex align-items-center gap-1">
-          <span className="text-secondary me-1">Layout View:</span>
+          <span className="text-secondary me-1">View:</span>
           {(["auto", "desktop", "mobile"] as const).map((m) => (
             <button key={m} type="button" onClick={() => setPreviewDevice(m)}
               className="btn btn-sm py-0 px-2"
@@ -92,35 +115,29 @@ export function AppShell() {
         </div>
       </div>
 
-      {/* Persistent Top Navbar */}
+      {/* Single Minimalist Header (No Duplicate Nav Bar) */}
       <Navbar className="py-2 border-bottom sticky-top" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
         <Container fluid className="px-4 px-xl-5 d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center gap-2">
-            <button type="button" className="md-btn-ghost p-2" aria-label="Toggle navigation panel" onClick={() => setNavDrawerOpen(true)}>
+            <button type="button" className="md-btn-ghost py-1 px-3 d-inline-flex align-items-center gap-2"
+              aria-label="Open navigation menu" onClick={() => setNavDrawerOpen(true)}>
               <List size={18} />
+              <span className="small fw-semibold">Menu</span>
             </button>
             <button type="button" className="md-btn-ghost p-2" aria-label="Go back"
               onClick={() => (location.key !== "default" ? navigate(-1) : navigate("/home"))}>
               <ArrowLeft size={18} />
             </button>
-            <Link to="/home" className="text-decoration-none ms-1" style={{ color: "var(--md-text)" }}>
-              <span className="md-condensed-display fs-3">MOSS <span className="md-moss-accent">&amp;</span> DAISY</span>
-            </Link>
           </div>
 
-          {!isMobile && (
-            <Nav className="gap-3">
-              {navLinks.slice(0, 4).map((l) => (
-                <Link key={l.to} to={l.to} className="text-decoration-none fw-medium small"
-                  style={{ color: location.pathname.startsWith(l.to) ? "var(--md-moss)" : "var(--md-text)" }}>
-                  {l.label}
-                </Link>
-              ))}
-            </Nav>
-          )}
+          <Link to="/home" className="text-decoration-none" style={{ color: "var(--md-text)" }}>
+            <span className="md-condensed-display fs-3" style={{ letterSpacing: "0.1em" }}>
+              MOSS <span className="md-moss-accent">&amp;</span> DAISY
+            </span>
+          </Link>
 
           <div className="d-flex align-items-center gap-2">
-            <Badge bg="secondary" className="d-none d-md-inline">{sessionMode === "guest" ? "Guest Mode" : "Account"}</Badge>
+            <Badge bg="secondary" className="d-none d-md-inline">{sessionMode === "guest" ? "Guest" : "Account"}</Badge>
             <button type="button" className="md-btn-ghost p-2" aria-label="Toggle theme" onClick={toggleTheme}>
               {theme === "dark" ? <SunFill size={17} /> : <MoonStarsFill size={17} />}
             </button>
@@ -135,51 +152,37 @@ export function AppShell() {
         </Container>
       </Navbar>
 
-      {orderSuccessMsg && (
-        <Container className="mt-3">
-          <div className="p-3 rounded-3 d-flex align-items-center justify-content-between"
-            style={{ backgroundColor: "rgba(143, 179, 107, 0.18)", border: "1px solid var(--md-moss)" }}>
-            <span className="small fw-semibold">{orderSuccessMsg}</span>
-            <button type="button" className="btn-close btn-sm" onClick={() => setOrderSuccessMsg(null)} />
-          </div>
-        </Container>
-      )}
-
-      {/* Main Route Content */}
       <main className="flex-grow-1">
         <Outlet />
       </main>
 
-      {/* 3-Column Editorial Footer */}
       <footer className="mt-5 py-4 border-top" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
         <Container fluid className="px-4 px-xl-5">
           <Row className="g-4">
             <Col md={4}>
               <div className="md-condensed-display fs-4 mb-1">MOSS <span className="md-moss-accent">&amp;</span> DAISY</div>
               <p className="small mb-0" style={{ color: "var(--md-text-muted)" }}>
-                Know what is on your plate. Customize every physical ingredient, see live PHP pricing &amp; nutrition, and enjoy healthy Filipino delivery.
+                Know what is on your plate. Customize every physical ingredient and see live PHP pricing &amp; nutrition.
               </p>
             </Col>
             <Col md={4}>
-              <div className="fw-bold small text-uppercase mb-2">Rubric &amp; Quick Links</div>
+              <div className="fw-bold small text-uppercase mb-2">Pages</div>
               <div className="d-flex flex-wrap gap-3 small">
                 {navLinks.map((l) => (
                   <Link key={l.to} to={l.to} style={{ color: "var(--md-text-muted)" }}>{l.label}</Link>
                 ))}
-                <Link to="/" style={{ color: "var(--md-text-muted)" }}>Landing</Link>
               </div>
             </Col>
             <Col md={4}>
-              <div className="fw-bold small text-uppercase mb-1">Iloilo City Kitchen Hub</div>
+              <div className="fw-bold small text-uppercase mb-1">Contact &amp; Kitchen Hub</div>
               <div className="small" style={{ color: "var(--md-text-muted)" }}>
-                Gen. Luna St., Iloilo City, Philippines &bull; 09458269961 &bull; ilczar9@gmail.com &bull; RA 10173 Data Privacy Compliant
+                Gen. Luna St., Iloilo City &bull; 09458269961 &bull; ilczar9@gmail.com
               </div>
             </Col>
           </Row>
         </Container>
       </footer>
 
-      {/* Mobile Separate Sticky Bottom Tab Bar */}
       {isMobile && (
         <nav className="fixed-bottom border-top py-2 px-3 d-flex justify-content-around align-items-center"
           style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)", zIndex: 250 }}>
@@ -187,7 +190,7 @@ export function AppShell() {
             <HouseDoorFill className="d-block mx-auto mb-1 md-moss-accent" />Home
           </Link>
           <Link to="/menu" className="text-decoration-none text-center small" style={{ color: "var(--md-text)" }}>
-            <GridFill className="d-block mx-auto mb-1 md-moss-accent" />Menu
+            <GridFill className="d-block mx-auto mb-1 md-moss-accent" />Shop
           </Link>
           <button type="button" className="btn btn-link text-decoration-none text-center small p-0" style={{ color: "var(--md-text)" }} onClick={() => setCartOpen(true)}>
             <BagCheckFill className="d-block mx-auto mb-1 md-moss-accent" />Cart ({cartCount})
@@ -198,28 +201,30 @@ export function AppShell() {
         </nav>
       )}
 
-      {/* Collapsible Full Page Navigation Offcanvas */}
+      {/* Single Collapsible Navigation Drawer */}
       <Offcanvas show={navDrawerOpen} onHide={() => setNavDrawerOpen(false)} style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title className="md-condensed-display fs-4">NAVIGATION MENU</Offcanvas.Title>
+          <Offcanvas.Title className="md-condensed-display fs-4">NAVIGATION</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column gap-2">
-          <Link to="/" onClick={() => setNavDrawerOpen(false)} className="p-2 rounded text-decoration-none" style={{ color: "var(--md-text)" }}>
-            Landing Page (Intro &amp; Stats)
-          </Link>
           {navLinks.map((l) => (
             <Link key={l.to} to={l.to} onClick={() => setNavDrawerOpen(false)}
-              className="p-2 rounded text-decoration-none fw-semibold" style={{ color: "var(--md-text)", backgroundColor: "var(--md-surface-2)" }}>
+              className="p-3 rounded-3 text-decoration-none fw-semibold border"
+              style={{
+                color: location.pathname.startsWith(l.to) ? "var(--md-on-moss)" : "var(--md-text)",
+                backgroundColor: location.pathname.startsWith(l.to) ? "var(--md-moss)" : "var(--md-surface-2)",
+                borderColor: "var(--md-line)",
+              }}>
               {l.label}
             </Link>
           ))}
-          <Link to="/auth/sign-in" onClick={() => setNavDrawerOpen(false)} className="p-2 rounded text-decoration-none" style={{ color: "var(--md-moss)" }}>
-            Sign In / Create Account
+          <Link to="/" onClick={() => setNavDrawerOpen(false)} className="p-2 rounded text-decoration-none small mt-2" style={{ color: "var(--md-text-muted)" }}>
+            &larr; Back to Welcome / Get Started Screen
           </Link>
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Cart Drawer Offcanvas */}
+      {/* Cart Drawer */}
       <Offcanvas placement="end" show={cartOpen} onHide={() => setCartOpen(false)} style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title className="md-condensed-display fs-4">YOUR CUSTOM CART ({cartCount})</Offcanvas.Title>
@@ -228,7 +233,7 @@ export function AppShell() {
           <div className="d-flex flex-column gap-3">
             {cart.length === 0 ? (
               <div className="text-center py-5">
-                <p className="small" style={{ color: "var(--md-text-muted)" }}>Your cart is empty. Customize a healthy dish to see live pricing!</p>
+                <p className="small" style={{ color: "var(--md-text-muted)" }}>Your cart is empty.</p>
                 <button type="button" className="md-btn-pill" onClick={() => { setCartOpen(false); navigate("/menu"); }}>Browse Menu</button>
               </div>
             ) : (
@@ -239,14 +244,11 @@ export function AppShell() {
                       <SmartAssetImage folderPath={line.folderPath} alt={line.dishName} style={{ width: 44, height: 44, borderRadius: 8 }} />
                       <div>
                         <div className="fw-bold small">{line.dishName}</div>
-                        <div style={{ fontSize: "0.7rem", color: "var(--md-text-muted)" }}>
-                          {line.vessel.replace("-", " ")} &bull; {line.kcal} kcal
-                        </div>
+                        <div style={{ fontSize: "0.7rem", color: "var(--md-text-muted)" }}>{line.vessel.replace("-", " ")} &bull; {line.kcal} kcal</div>
                       </div>
                     </div>
                     <button type="button" className="btn btn-sm text-danger" onClick={() => removeFromCart(line.lineId)}><Trash /></button>
                   </div>
-                  <div className="small mt-1" style={{ fontSize: "0.72rem", color: "var(--md-text-muted)" }}>{line.customSummary}</div>
                   <div className="d-flex align-items-center justify-content-between mt-2 pt-2 border-top" style={{ borderColor: "var(--md-line)" }}>
                     <span className="fw-bold md-moss-accent">&#8369;{line.unitPricePhp * line.quantity}</span>
                     <div className="d-flex align-items-center gap-2">
@@ -259,30 +261,55 @@ export function AppShell() {
               ))
             )}
           </div>
-
           {cart.length > 0 && (
             <div className="pt-3 border-top" style={{ borderColor: "var(--md-line)" }}>
               <div className="d-flex justify-content-between small mb-1"><span>Subtotal</span><span>&#8369;{cartSubtotal}</span></div>
               <div className="d-flex justify-content-between small mb-2"><span>Delivery Fee</span><span>{deliveryFee === 0 ? "FREE" : `\u20B1${deliveryFee}`}</span></div>
               <div className="d-flex justify-content-between fw-bold fs-5 mb-3"><span>Total</span><span className="md-moss-accent">&#8369;{cartSubtotal + deliveryFee}</span></div>
               <button type="button" className="md-btn-pill w-100 justify-content-center"
-                onClick={() => { setCartOpen(false); setConfirmAddressOpen(true); }}>
-                <GeoAltFill /> Confirm Delivery Address &amp; Order
+                onClick={() => { setLocError(null); setCartOpen(false); setConfirmAddressOpen(true); }}>
+                <GeoAltFill /> Confirm Address &amp; Device Location
               </button>
             </div>
           )}
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Confirm Delivery Address Modal Before Delivering */}
+      {/* Confirm Delivery Address + Device Location Check Modal */}
       <Modal show={confirmAddressOpen} onHide={() => setConfirmAddressOpen(false)} centered>
         <Modal.Header closeButton style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <Modal.Title className="md-condensed-display fs-4">CONFIRM DELIVERY ADDRESS</Modal.Title>
+          <Modal.Title className="md-condensed-display fs-4">CONFIRM LOCATION &amp; ADDRESS</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <p className="small" style={{ color: "var(--md-text-muted)" }}>
-            Please confirm your Philippine delivery address before we prepare and dispatch your customized order:
-          </p>
+          {/* Step 1: Device Location Check */}
+          <div className="p-3 rounded-3 mb-3 border" style={{ backgroundColor: "var(--md-surface-2)", borderColor: deviceLocationEnabled ? "var(--md-moss)" : "var(--md-warning)" }}>
+            <div className="d-flex align-items-center justify-content-between gap-2">
+              <div>
+                <div className="fw-bold small">
+                  {deviceLocationEnabled ? (
+                    <><CheckCircleFill className="md-moss-accent me-1" />Device Location ON ({deviceCoords.lat}&deg; N, {deviceCoords.lng}&deg; E)</>
+                  ) : (
+                    <><ExclamationTriangleFill className="text-warning me-1" />Device Location is OFF</>
+                  )}
+                </div>
+                <div className="small" style={{ color: "var(--md-text-muted)" }}>
+                  {deviceLocationEnabled
+                    ? "Your live drop-off pin is active for the rider."
+                    : "Turn on your device location so we can deliver to you and show live rider updates."}
+                </div>
+              </div>
+              {!deviceLocationEnabled && (
+                <button type="button" className="md-btn-pill py-1 px-3 small flex-shrink-0" onClick={handleTurnOnLocation}>
+                  Turn On Location
+                </button>
+              )}
+            </div>
+          </div>
+
+          {locError && <div className="small text-danger mb-2">{locError}</div>}
+
+          {/* Step 2: Confirm Address */}
+          <div className="fw-bold small text-uppercase mb-2">Delivery Address</div>
           {addresses.map((a) => (
             <div key={a.id} onClick={() => setSelectedAddrId(a.id)} role="button" tabIndex={0}
               onKeyDown={(e) => { if (e.key === "Enter") setSelectedAddrId(a.id); }}
@@ -294,42 +321,30 @@ export function AppShell() {
               }}>
               <div className="fw-bold small d-flex justify-content-between">
                 <span><GeoAltFill className="md-moss-accent me-1" />{a.label}</span>
-                {(selectedAddrId || addresses[0]?.id) === a.id && <Badge bg="success">Confirmed</Badge>}
+                {(selectedAddrId || addresses[0]?.id) === a.id && <Badge bg="success">Selected</Badge>}
               </div>
               <div className="small mt-1">{a.street}, Brgy. {a.barangay}, {a.city}, {a.region}</div>
             </div>
           ))}
 
           {!addingNewAddr ? (
-            <button type="button" className="md-btn-ghost btn-sm mt-2" onClick={() => setAddingNewAddr(true)}>
-              + Deliver to a Different Barangay / Address
+            <button type="button" className="md-btn-ghost btn-sm mt-1" onClick={() => setAddingNewAddr(true)}>
+              + Add Another Address
             </button>
           ) : (
             <div className="p-3 rounded-3 mt-2 border" style={{ borderColor: "var(--md-line)" }}>
-              <Form.Group className="mb-2">
-                <Form.Label className="small">Region</Form.Label>
-                <Form.Control size="sm" value={newRegion} onChange={(e) => setNewRegion(e.target.value)} />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label className="small">City / Municipality</Form.Label>
-                <Form.Control size="sm" value={newCity} onChange={(e) => setNewCity(e.target.value)} />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label className="small">Barangay*</Form.Label>
-                <Form.Control size="sm" placeholder="e.g. Jaro / Mandurriao" value={newBrgy} onChange={(e) => setNewBrgy(e.target.value)} />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label className="small">Street / House No. / Landmark*</Form.Label>
-                <Form.Control size="sm" placeholder="Street & Landmark" value={newStreet} onChange={(e) => setNewStreet(e.target.value)} />
-              </Form.Group>
+              <Form.Control size="sm" className="mb-2" value={newRegion} onChange={(e) => setNewRegion(e.target.value)} placeholder="Region" />
+              <Form.Control size="sm" className="mb-2" value={newCity} onChange={(e) => setNewCity(e.target.value)} placeholder="City" />
+              <Form.Control size="sm" className="mb-2" value={newBrgy} onChange={(e) => setNewBrgy(e.target.value)} placeholder="Barangay*" />
+              <Form.Control size="sm" className="mb-2" value={newStreet} onChange={(e) => setNewStreet(e.target.value)} placeholder="Street / Landmark*" />
               <button type="button" className="md-btn-pill py-1 px-3 small" onClick={handleSaveNewAddress}>Save Address</button>
             </div>
           )}
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: "var(--md-surface)" }}>
-          <button type="button" className="md-btn-ghost" onClick={() => setConfirmAddressOpen(false)}>Back</button>
+          <button type="button" className="md-btn-ghost" onClick={() => setConfirmAddressOpen(false)}>Cancel</button>
           <button type="button" className="md-btn-pill" onClick={handleConfirmDelivery}>
-            Confirm Address &amp; Deliver Now (&#8369;{cartSubtotal + deliveryFee})
+            Confirm &amp; Start Live Delivery (&#8369;{cartSubtotal + deliveryFee})
           </button>
         </Modal.Footer>
       </Modal>

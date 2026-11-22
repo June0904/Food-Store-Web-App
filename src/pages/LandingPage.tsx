@@ -130,7 +130,7 @@ export function LandingPage() {
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
           <p className="small mb-0">
-            In compliance with the Philippine Data Privacy Act of 2012 (RA 10173), Moss &amp; Daisy collects only your name, contact details, delivery address, and order history to fulfill your customized food orders.
+            In compliance with the Philippine Data Privacy Act of 2012 (RA 10173), Moss &amp; Daisy collects your name, contact details, delivery address, order history, and checks your Device Geolocation so we can verify your drop-off point and display real-time Live Driver Location updates while your order is on the way.
           </p>
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: "var(--md-surface)" }}>

@@ -20,21 +20,34 @@
 }
 
 [data-bs-theme="light"] {
-  --md-canvas: #FBFAF5;
-  --md-surface: #FFFFFF;
-  --md-surface-2: #F1EFE6;
-  --md-surface-glass: rgba(255, 255, 255, 0.88);
-  --md-line: #D9D6C8;
+  --md-canvas: #EAE5DC;
+  --md-surface: #F3EFE6;
+  --md-surface-2: #E2DDD2;
+  --md-surface-glass: rgba(243, 239, 230, 0.94);
+  --md-line: #C2BCAE;
   --md-text: #121412;
-  --md-text-muted: #5A5F57;
-  --md-moss: #4F6F37;
-  --md-moss-strong: #3F5A2C;
-  --md-moss-deep: #3F5A2C;
-  --md-on-moss: #FBFAF5;
-  --md-danger: #B3261E;
-  --md-warning: #8A6100;
-  --md-watermark: rgba(18, 20, 18, 0.065);
-  --md-shadow: 0 14px 34px rgba(18, 20, 18, 0.08);
+  --md-text-muted: #333830;
+  --md-moss: #2D4A1E;
+  --md-moss-strong: #1F3514;
+  --md-moss-deep: #1F3514;
+  --md-on-moss: #F4F2EA;
+  --md-danger: #9E1C15;
+  --md-warning: #6E4D00;
+  --md-watermark: rgba(18, 20, 18, 0.07);
+  --md-shadow: 0 10px 28px rgba(18, 20, 18, 0.09);
+}
+
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-select {
+  background-color: #F8F5EE;
+  color: #121412;
+  border-color: #B5AFA0;
+}
+
+[data-bs-theme="light"] .md-plate-ingredient-chip {
+  background: #F3EFE6;
+  color: #121412;
+  border-color: #2D4A1E;
 }
 
 body {

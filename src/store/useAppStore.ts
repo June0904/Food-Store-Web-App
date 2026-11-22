@@ -49,6 +49,8 @@ interface AppState {
   theme: "dark" | "light";
   previewDevice: "auto" | "desktop" | "mobile";
   consentAccepted: boolean;
+  deviceLocationEnabled: boolean;
+  deviceCoords: { lat: number; lng: number };
   sessionMode: "guest" | "user";
   userProfile: {
     name: string;
@@ -68,6 +70,8 @@ interface AppState {
   toggleTheme: () => void;
   setPreviewDevice: (mode: "auto" | "desktop" | "mobile") => void;
   acceptConsent: () => void;
+  setDeviceLocation: (enabled: boolean, coords?: { lat: number; lng: number }) => void;
+  markOrderDelivered: (orderId: string, serviceRating?: number) => void;
   setSessionMode: (mode: "guest" | "user") => void;
   updateProfile: (patch: Partial<AppState["userProfile"]>) => void;
   addAddress: (addr: Omit<DeliveryAddress, "id">) => void;
@@ -145,6 +149,8 @@ export const useAppStore = create<AppState>()(
       theme: "dark",
       previewDevice: "auto",
       consentAccepted: false,
+      deviceLocationEnabled: false,
+      deviceCoords: { lat: 10.6969, lng: 122.5644 },
       sessionMode: "user",
       userProfile: {
         name: "Andrea Dela Cruz",
@@ -167,6 +173,8 @@ export const useAppStore = create<AppState>()(
       toggleTheme: () => set((s) => ({ theme: s.theme === "dark" ? "light" : "dark" })),
       setPreviewDevice: (previewDevice) => set({ previewDevice }),
       acceptConsent: () => set({ consentAccepted: true }),
+      setDeviceLocation: (enabled, coords) => set((s) => ({ deviceLocationEnabled: enabled, deviceCoords: coords ?? s.deviceCoords })),
+      markOrderDelivered: (orderId) => set((s) => ({ deliveryHistory: s.deliveryHistory.map((o) => o.orderId === orderId ? { ...o, status: 'Delivered' } : o) })),
       setSessionMode: (sessionMode) => set({ sessionMode }),
       updateProfile: (patch) => set((s) => ({ userProfile: { ...s.userProfile, ...patch } })),
       addAddress: (addr) =>

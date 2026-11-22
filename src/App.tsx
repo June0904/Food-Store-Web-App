@@ -1,3 +1,4 @@
+import { DeliveryTrackerPage } from "./pages/DeliveryTrackerPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppShell } from "./shell/AppShell";
 import { LandingPage } from "./pages/LandingPage";
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/menu/:category/:slug" element={<ProductCustomizerPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/delivery/:orderId" element={<DeliveryTrackerPage />} />
           <Route path="/profile" element={<ProfileHistoryPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/auth/sign-in" element={<AuthPage mode="sign-in" />} />
