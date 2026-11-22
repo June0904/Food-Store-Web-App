@@ -19,7 +19,7 @@ export function LandingPage() {
 
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showAuthChoice, setShowAuthChoice] = useState(false);
-  const [consentChecked, setConsentChecked] = useState(privacyAccepted);
+  const [consentChecked, setConsentChecked] = useState(true);
   const [gpsChecked, setGpsChecked] = useState(true);
 
   const activeDish = showcaseDishes[selectedDishIdx] ?? MENU_ITEMS[0];
@@ -189,56 +189,59 @@ export function LandingPage() {
         </Row>
       </Container>
 
-      {/* Step 1: RA 10173 Privacy & Device Geolocation Notice Modal */}
-      <Modal show={showPrivacy} onHide={() => setShowPrivacy(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="h5 fw-bold">
-            <ShieldCheck className="md-moss-accent me-2" />
-            Data Privacy &amp; Live GPS Notice (RA 10173)
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="small mb-2">
-            Welcome to <strong>Moss &amp; Daisy</strong>. In compliance with the <strong>Philippine Data Privacy Act of 2012 (RA 10173)</strong>, we protect your personal profile, dietary preferences, and delivery history.
-          </p>
-          <p className="small mb-3" style={{ color: "var(--md-text-muted)" }}>
-            <GeoAltFill className="md-moss-accent me-1" />
-            <strong>Device Geolocation &amp; Live Driver Tracking:</strong> Before dispatching an order, we verify that your device location is turned ON so you can track our assigned rider&apos;s live GPS route, vehicle model, and plate number in real time.
-          </p>
-          <Form.Check type="checkbox" id="privacy-consent-chk" className="mb-2 small fw-semibold"
-            checked={consentChecked} onChange={(e) => { sfx.click(); setConsentChecked(e.target.checked); }}
-            label="I agree to the RA 10173 Privacy Notice and customized nutrition storage." />
-          <Form.Check type="checkbox" id="gps-consent-chk" className="small fw-semibold"
-            checked={gpsChecked} onChange={(e) => { sfx.click(); setGpsChecked(e.target.checked); }}
-            label="Enable Device Location (GPS ON) for accurate Iloilo & PH delivery tracking." />
-        </Modal.Body>
-        <Modal.Footer>
-          <button type="button" className="md-btn-pill w-100 justify-content-center py-2"
-            disabled={!consentChecked} onClick={handleConfirmPrivacy}>
-            Accept &amp; Continue
-          </button>
-        </Modal.Footer>
-      </Modal>
-
-      {/* Step 2: New-Device Account Choice Modal */}
-      <Modal show={showAuthChoice} onHide={() => setShowAuthChoice(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="h5 fw-bold">How Would You Like to Order?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="d-grid gap-3">
-          <button type="button" className="md-btn-pill py-3 justify-content-center"
-            onClick={() => enterAs("user", "/auth")}>
-            <PersonPlusFill className="me-2" /> Create an Account (Save Plates &amp; Addresses)
-          </button>
-          <button type="button" className="md-btn-ghost py-3 justify-content-center"
-            onClick={() => enterAs("user", "/auth")}>
-            <BoxArrowInRight className="me-2" /> Sign In to Existing Account
-          </button>
-          <button type="button" className="md-btn-ghost py-2 justify-content-center small"
-            onClick={() => enterAs("guest", "/home")}>
-            <PersonBadge className="me-2" /> Continue as Guest to Home Page
-          </button>
-        </Modal.Body>
+      {/* Unified 2-Step Onboarding Modal (No Competing Backdrops) */}
+      <Modal show={showPrivacy || showAuthChoice} onHide={() => { setShowPrivacy(false); setShowAuthChoice(false); }} centered>
+        {showPrivacy && !showAuthChoice ? (
+          <>
+            <Modal.Header closeButton>
+              <Modal.Title className="h5 fw-bold">
+                <ShieldCheck className="md-moss-accent me-2" />
+                Data Privacy &amp; Live GPS Notice (RA 10173)
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p className="small mb-2">
+                Welcome to <strong>Moss &amp; Daisy</strong>. In compliance with the <strong>Philippine Data Privacy Act of 2012 (RA 10173)</strong>, we protect your personal profile, dietary preferences, and delivery history.
+              </p>
+              <p className="small mb-3" style={{ color: "var(--md-text-muted)" }}>
+                <GeoAltFill className="md-moss-accent me-1" />
+                <strong>Device Geolocation &amp; Live Driver Tracking:</strong> Before dispatching an order, we verify that your device location is turned ON so you can track our assigned rider&apos;s live GPS route, vehicle model, and plate number in real time.
+              </p>
+              <Form.Check type="checkbox" id="privacy-consent-chk" className="mb-2 small fw-semibold"
+                checked={consentChecked} onChange={(e) => { sfx.click(); setConsentChecked(e.target.checked); }}
+                label="I agree to the RA 10173 Privacy Notice and customized nutrition storage." />
+              <Form.Check type="checkbox" id="gps-consent-chk" className="small fw-semibold"
+                checked={gpsChecked} onChange={(e) => { sfx.click(); setGpsChecked(e.target.checked); }}
+                label="Enable Device Location (GPS ON) for accurate Iloilo & PH delivery tracking." />
+            </Modal.Body>
+            <Modal.Footer>
+              <button type="button" className="md-btn-pill w-100 justify-content-center py-2"
+                onClick={handleConfirmPrivacy}>
+                Agree &amp; Continue &rarr;
+              </button>
+            </Modal.Footer>
+          </>
+        ) : (
+          <>
+            <Modal.Header closeButton>
+              <Modal.Title className="h5 fw-bold">How Would You Like to Order?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="d-grid gap-3">
+              <button type="button" className="md-btn-pill py-3 justify-content-center"
+                onClick={() => enterAs("user", "/auth")}>
+                <PersonPlusFill className="me-2" /> Create an Account (Save Plates &amp; Addresses)
+              </button>
+              <button type="button" className="md-btn-ghost py-3 justify-content-center"
+                onClick={() => enterAs("user", "/auth")}>
+                <BoxArrowInRight className="me-2" /> Sign In to Existing Account
+              </button>
+              <button type="button" className="md-btn-ghost py-2 justify-content-center small"
+                onClick={() => enterAs("guest", "/home")}>
+                <PersonBadge className="me-2" /> Continue as Guest to Home Page
+              </button>
+            </Modal.Body>
+          </>
+        )}
       </Modal>
     </div>
   );
