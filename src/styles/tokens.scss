@@ -1,5 +1,3 @@
-
-
 :root,
 [data-bs-theme="dark"] {
   --md-canvas: #121412;
@@ -57,8 +55,6 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
   overflow-x: hidden;
 }
-
-/* Reference 1: INSTANT Photo Studio - Hairline Framed Titles & 2x2 Tiles & Underline Form */
 .md-instant-heading {
   display: inline-flex;
   flex-direction: column;
@@ -113,8 +109,6 @@ body {
   box-shadow: none !important;
   border-bottom-width: 2px !important;
 }
-
-/* Reference 2: HARVEST Bakery - Serif Editorial Display, Pill CTA, Quality Stamp, 3-Icon Strip */
 .md-serif-display {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-weight: 600;
@@ -188,8 +182,6 @@ body {
   letter-spacing: 0.08em;
   box-shadow: var(--md-shadow);
 }
-
-/* Reference 3 & 4: GAZU & NORD - Giant Wordmark Backdrop & Dark 3-Column Strip */
 .md-wordmark-stage {
   position: relative;
   overflow: hidden;
@@ -218,8 +210,6 @@ body {
   border: 1px solid #343A33;
   padding: 1.5rem;
 }
-
-/* Live Plate / Bowl / Bento-Box Stage */
 .md-plate-stage {
   position: relative;
   width: 310px;
@@ -389,10 +379,7 @@ html, body, #root {
 @keyframes mdLoaderFadeOut { 0%, 60% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 .md-transition-loader { animation: mdLoaderFadeOut 0.48s ease forwards; }
 .md-tossed-plate .md-plate-ingredient-chip { transform: translate(-50%, -50%) scale(1.18) rotate(-6deg) !important; }
-/* ProductCustomizerHideLegacy */
 .col-lg-5 .md-plate-stage { display: none !important; }
-
-/* Global Disable Highlighting & Custom Botanical Cursor */
 *, *::before, *::after, html, body {
   -webkit-user-select: none !important;
   -moz-user-select: none !important;

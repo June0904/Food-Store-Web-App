@@ -32,7 +32,7 @@ export function HomePage() {
 
   return (
     <Container fluid className="px-4 px-xl-5 py-4"><SaleFeatureBanner />
-      {/* Rubric Featured Spotlight Hero with CTA & Link to Product Page */}
+      
       <div className="md-wordmark-stage mb-5">
         <div className="md-giant-wordmark">FRESH</div>
         <Row className="align-items-center g-4">
@@ -60,7 +60,7 @@ export function HomePage() {
         </Row>
       </div>
 
-      {/* PREVIOUSLY ORDERED ITEMS / ORDER AGAIN (Owner Requirement) */}
+      
       <div className="mb-5">
         <div className="d-flex align-items-center justify-content-between mb-3">
           <h2 className="md-condensed-display h3 mb-0">
@@ -108,7 +108,7 @@ export function HomePage() {
         </Row>
       </div>
 
-      {/* RECOMMENDED HEALTHY FOODS (Owner Requirement) */}
+      
       <div className="mb-5">
         <div className="text-center mb-4">
           <h2 className="md-instant-heading h3">
@@ -149,7 +149,7 @@ export function HomePage() {
         </Row>
       </div>
 
-      {/* PROMOS TICKET RAIL */}
+      
       <div className="mb-5">
         <h2 className="md-condensed-display h3 mb-3"><TicketPerforatedFill className="md-moss-accent me-2" />ACTIVE PROMOS</h2>
         <Row className="g-3">
@@ -174,7 +174,7 @@ export function HomePage() {
         </Row>
       </div>
 
-      {/* MOST ORDERED LEADERBOARD */}
+      
       <div className="mb-5">
         <h2 className="md-condensed-display h3 mb-3">MOST ORDERED TODAY</h2>
         <Row className="g-3">
@@ -202,7 +202,7 @@ export function HomePage() {
         </Row>
       </div>
 
-      {/* COMMUNITY RATINGS & COMMENTS WALL */}
+      
       <div className="md-surface-card p-4">
         <h2 className="md-condensed-display h3 mb-3">COMMUNITY RATINGS &amp; COMMENTS</h2>
         <Row className="g-4">

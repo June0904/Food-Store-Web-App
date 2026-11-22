@@ -101,7 +101,7 @@ export function DeliveryTrackerPage() {
             )}
           </div>
 
-          {/* Live Driver GPS Location Map */}
+          
           <div className="md-surface-card p-4">
             <div className="d-flex justify-content-between align-items-center mb-2">
               <h2 className="md-condensed-display h4 mb-0"><GeoAltFill className="md-moss-accent me-2" />LIVE DRIVER LOCATION MAP</h2>
@@ -130,7 +130,7 @@ export function DeliveryTrackerPage() {
         </Col>
 
         <Col lg={5}>
-          {/* Driver & Vehicle Details Card */}
+          
           <div className="md-surface-card p-4 mb-4">
             <h2 className="md-condensed-display h4 mb-3"><PersonBadgeFill className="md-moss-accent me-2" />ASSIGNED RIDER &amp; VEHICLE</h2>
             <div className="p-3 rounded-3 mb-2" style={{ backgroundColor: "var(--md-surface-2)" }}>
@@ -159,7 +159,7 @@ export function DeliveryTrackerPage() {
             </div>
           </div>
 
-          {/* Post-Delivery Confirmation & Service Star Rating */}
+          
           {stageIdx === 4 && (
             <div className="md-surface-card p-4 border" style={{ borderColor: "var(--md-moss)" }}>
               <h2 className="md-condensed-display h4 md-moss-accent mb-2">

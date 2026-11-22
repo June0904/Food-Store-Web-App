@@ -57,7 +57,7 @@ export function LandingPage() {
         background: "radial-gradient(circle at 18% 22%, rgba(79, 111, 55, 0.24) 0%, transparent 45%), radial-gradient(circle at 82% 75%, rgba(143, 179, 107, 0.18) 0%, transparent 50%), var(--md-canvas)",
       }}>
       <Container fluid className="px-4 px-xl-5 py-4 my-auto position-relative" style={{ zIndex: 2 }}>
-        {/* Minimalist Top Crest (No Navbar / No Header) */}
+        
         <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-2"
           style={{ borderBottom: "1px solid var(--md-line)" }}>
           <div className="d-flex align-items-center gap-2">
@@ -81,7 +81,7 @@ export function LandingPage() {
         </div>
 
         <Row className="align-items-center g-5">
-          {/* Left Column: Brand Story, Interactive Tasting Reel & Get Started CTA */}
+          
           <Col lg={6}>
             <div className="text-uppercase small fw-bold md-moss-accent mb-2" style={{ letterSpacing: "0.22em" }}>
               MOSS &amp; DAISY &bull; BESPOKE HEALTHY KITCHEN
@@ -94,7 +94,7 @@ export function LandingPage() {
               Customize authentic Filipino power bowls, artisan sourdough clubs, and nourishing broths with real-time PHP ingredient pricing, USDA/PhilFCT macros, and 3D deconstructed food inspection.
             </p>
 
-            {/* Interactive Tasting Reel Switcher */}
+            
             <div className="mb-4">
               <div className="small text-uppercase fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--md-text-muted)" }}>
                 <Stars className="me-1 md-moss-accent" /> Interactive Tasting Preview (Click a Dish to Inspect):
@@ -113,7 +113,7 @@ export function LandingPage() {
               </div>
             </div>
 
-            {/* Primary Actions */}
+            
             <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
               <button type="button" className="md-btn-pill py-3 px-5 fs-5" onClick={handleGetStarted}>
                 Get Started &rarr;
@@ -124,7 +124,7 @@ export function LandingPage() {
               </button>
             </div>
 
-            {/* Live Key Metrics Grid */}
+            
             <Row className="g-3 mb-4">
               <Col xs={6} sm={3}>
                 <div className="md-surface-card p-3 text-center">
@@ -152,7 +152,7 @@ export function LandingPage() {
               </Col>
             </Row>
 
-            {/* Verified Review Ribbon */}
+            
             <div className="md-surface-card p-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
               <div className="d-flex align-items-center gap-2">
                 <StarRating value={5} size={14} />
@@ -162,7 +162,7 @@ export function LandingPage() {
             </div>
           </Col>
 
-          {/* Right Column: Interactive Studio Plated & 3D Levitating Dismantle Stage */}
+          
           <Col lg={6}>
             <div className="md-surface-card p-4 position-relative">
               <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
@@ -189,7 +189,7 @@ export function LandingPage() {
         </Row>
       </Container>
 
-      {/* Unified 2-Step Onboarding Modal (No Competing Backdrops) */}
+      
       <Modal show={showPrivacy || showAuthChoice} onHide={() => { setShowPrivacy(false); setShowAuthChoice(false); }} centered>
         {showPrivacy && !showAuthChoice ? (
           <>

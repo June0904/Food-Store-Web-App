@@ -4,7 +4,7 @@ Set-Location $ProjectDir
 
 Write-Host "=== 1. Checking All 19 Source Files & Project Scripts ===" -ForegroundColor Cyan
 $RequiredFiles = @(
-  "package.json", "index.html", "MEMORY.md", "sync-images.ps1",
+  "package.json", "index.html", "README.md", "sync-images.ps1",
   "src\main.tsx", "src\App.tsx", "src\styles\tokens.scss", "src\types\menu.ts",
   "src\data\customImageMap.ts", "src\data\ingredientsData.ts", "src\data\menuData.ts",
   "src\components\ui\SmartAssetImage.tsx", "src\components\ui\StarRating.tsx",

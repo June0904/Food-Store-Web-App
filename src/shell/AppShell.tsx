@@ -128,7 +128,7 @@ export function AppShell() {
         </div>
       </div>
 
-      {/* Single Minimalist Header (No Duplicate Nav Bar) */}
+      
       <Navbar className="py-2 border-bottom sticky-top" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
         <Container fluid className="px-4 px-xl-5 d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center gap-2">
@@ -214,7 +214,7 @@ export function AppShell() {
         </nav>
       )}
 
-      {/* Single Collapsible Navigation Drawer */}
+      
       <Offcanvas show={navDrawerOpen} onHide={() => setNavDrawerOpen(false)} style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title className="md-condensed-display fs-4">NAVIGATION</Offcanvas.Title>
@@ -237,7 +237,7 @@ export function AppShell() {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Cart Drawer */}
+      
       <Offcanvas placement="end" show={cartOpen} onHide={() => setCartOpen(false)} style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title className="md-condensed-display fs-4">YOUR CUSTOM CART ({cartCount})</Offcanvas.Title>
@@ -288,13 +288,13 @@ export function AppShell() {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Confirm Delivery Address + Device Location Check Modal */}
+      
       <Modal show={confirmAddressOpen} onHide={() => setConfirmAddressOpen(false)} centered>
         <Modal.Header closeButton style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
           <Modal.Title className="md-condensed-display fs-4">CONFIRM LOCATION &amp; ADDRESS</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          {/* Step 1: Device Location Check */}
+          
           <div className="p-3 rounded-3 mb-3 border" style={{ backgroundColor: "var(--md-surface-2)", borderColor: deviceLocationEnabled ? "var(--md-moss)" : "var(--md-warning)" }}>
             <div className="d-flex align-items-center justify-content-between gap-2">
               <div>
@@ -321,7 +321,7 @@ export function AppShell() {
 
           {locError && <div className="small text-danger mb-2">{locError}</div>}
 
-          {/* Step 2: Confirm Address */}
+          
           <div className="fw-bold small text-uppercase mb-2">Delivery Address</div>
           {addresses.map((a) => (
             <div key={a.id} onClick={() => setSelectedAddrId(a.id)} role="button" tabIndex={0}

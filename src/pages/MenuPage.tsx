@@ -46,7 +46,7 @@ export function MenuPage() {
       </div>
 
       <SaleFeatureBanner />
-      {/* Category Tiles */}
+      
       <Row className="g-3 mb-4">
         {categories.map((slug) => {
           const meta = CATEGORY_META[slug];
@@ -69,7 +69,7 @@ export function MenuPage() {
         })}
       </Row>
 
-      {/* Search & Availability Filter Bar */}
+      
       <div className="md-surface-card p-3 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
         <div className="d-flex align-items-center gap-2 flex-grow-1">
           <Search className="md-moss-accent" />
@@ -95,7 +95,7 @@ export function MenuPage() {
         </div>
       </div>
 
-      {/* Product Grid with Available / Unavailable Status */}
+      
       <Row className="g-4">
         {filtered.map((item) => {
           const totals = calculateDishTotals(item, item.defaultIngredientIds, 1);

@@ -1,5 +1,0 @@
-FOLDER: public/images/ingredients/proteins/braised-chicken-adobo
-TYPE: ingredient
-HOW TO USE YOUR OWN IMAGE:
-Drop 'image.png', 'image.webp', or 'image.jpg' inside this folder.
-The app checks for your custom image first and falls back to 'preview.svg' automatically.

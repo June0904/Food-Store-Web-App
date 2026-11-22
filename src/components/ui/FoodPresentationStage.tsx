@@ -55,7 +55,7 @@ export function FoodPresentationStage({ dish, selectedIds, isDismantled, onToggl
               transition={{ duration: 0.38 }}
               className="d-flex flex-column align-items-center justify-content-center p-4"
               style={{ minHeight: 410 }}>
-              {/* Dark Matte Studio Slate Plate (image-10.png style) */}
+              
               <div className="position-relative d-flex align-items-center justify-content-center rounded-circle"
                 style={{
                   width: 310, height: 310,
@@ -85,7 +85,7 @@ export function FoodPresentationStage({ dish, selectedIds, isDismantled, onToggl
               exit={{ opacity: 0 }}
               className="d-flex flex-column align-items-center justify-content-between py-4 px-3 position-relative"
               style={{ minHeight: 540 }}>
-              {/* Vertical Levitating Stack (image-9.png style) */}
+              
               <div className="d-flex flex-column align-items-center w-100 position-relative" style={{ zIndex: 2 }}>
                 {layers.map((ing, idx) => {
                   const isLeft = idx % 2 === 0;
@@ -125,7 +125,7 @@ export function FoodPresentationStage({ dish, selectedIds, isDismantled, onToggl
                 })}
               </div>
 
-              {/* Rustic Wood & Parchment Base Board at Bottom (image-9.png style) */}
+              
               <div className="w-100 d-flex flex-column align-items-center mt-2" style={{ zIndex: 1 }}>
                 <div style={{
                   width: "76%", height: 22, borderRadius: "50%",

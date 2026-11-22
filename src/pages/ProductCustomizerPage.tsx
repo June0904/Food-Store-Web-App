@@ -60,7 +60,7 @@ export function ProductCustomizerPage() {
     <Container fluid className="px-4 px-xl-5 py-4">
       <div className="md-surface-card p-4">
         <Row className="g-4 align-items-start">
-          {/* Live Visual Plate / Bowl / Bento-Box / Soup Bowl / Drink Cup */}
+          
           <Col lg={5} className="text-center">
             <div className="d-flex justify-content-center gap-2 mb-3 flex-wrap">
               {(["wooden-bowl", "ceramic-plate", "bento-box", "soup-bowl"] as VesselType[]).map((v) => (
@@ -94,7 +94,7 @@ export function ProductCustomizerPage() {
             </button>
           </Col>
 
-          {/* Right Column: Ingredient Editor & Live Price Calculator */}
+          
           <Col lg={7}>
             <div className="d-flex flex-wrap gap-1 mb-2">
               {dish.healthBadges.map((b) => <Badge key={b} bg="success">{b}</Badge>)}
@@ -163,7 +163,7 @@ export function ProductCustomizerPage() {
               </div>
             ))}
 
-            {/* Live Price & Nutrition Box */}
+            
             <div className="p-3 rounded-3 border mt-3" style={{ backgroundColor: "var(--md-surface-2)", borderColor: "var(--md-moss)" }}>
               <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
                 <div>
