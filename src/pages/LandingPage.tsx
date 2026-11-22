@@ -1,154 +1,243 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Modal } from "react-bootstrap";
-import { ArrowRight, ShieldCheck } from "react-bootstrap-icons";
+import { Container, Row, Col, Modal, Form, Badge } from "react-bootstrap";
+import { ShieldCheck, PersonPlusFill, BoxArrowInRight, PersonBadge, GeoAltFill, Stars, VolumeUpFill, VolumeMuteFill, CheckCircleFill, Fire } from "react-bootstrap-icons";
+import { MENU_ITEMS, calculateDishTotals } from "../data/menuData";
 import { useAppStore } from "../store/useAppStore";
-import { MENU_ITEMS, INGREDIENTS_DB, calculateDishTotals } from "../data/menuData";
-import { SmartAssetImage } from "../components/ui/SmartAssetImage";
 import { StarRating } from "../components/ui/StarRating";
+import { FoodPresentationStage } from "../components/ui/FoodPresentationStage";
+import { sfx } from "../lib/soundEffects";
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { consentAccepted, acceptConsent, setSessionMode } = useAppStore();
-  const [privacyOpen, setPrivacyOpen] = useState(false);
-  const [authChoiceOpen, setAuthChoiceOpen] = useState(false);
-  const [declineNote, setDeclineNote] = useState(false);
+  const { acceptPrivacy, privacyAccepted, setSessionMode, setDeviceLocation } = useAppStore();
 
-  const sampleDish = MENU_ITEMS[0];
-  const [previewIds, setPreviewIds] = useState<string[]>(sampleDish.defaultIngredientIds);
-  const totals = calculateDishTotals(sampleDish, previewIds, 1);
-  const activeIngs = previewIds.map((id) => INGREDIENTS_DB[id]).filter(Boolean);
+  const showcaseDishes = MENU_ITEMS.slice(0, 4);
+  const [selectedDishIdx, setSelectedDishIdx] = useState(0);
+  const [isDismantled, setIsDismantled] = useState(false);
+  const [soundOn, setSoundOn] = useState(sfx.isEnabled());
+
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showAuthChoice, setShowAuthChoice] = useState(false);
+  const [consentChecked, setConsentChecked] = useState(privacyAccepted);
+  const [gpsChecked, setGpsChecked] = useState(true);
+
+  const activeDish = showcaseDishes[selectedDishIdx] ?? MENU_ITEMS[0];
+  const totals = calculateDishTotals(activeDish, activeDish.defaultIngredientIds, 1);
 
   const handleGetStarted = () => {
-    setDeclineNote(false);
-    if (consentAccepted) setAuthChoiceOpen(true);
-    else setPrivacyOpen(true);
+    sfx.whoosh();
+    if (privacyAccepted) {
+      setShowAuthChoice(true);
+    } else {
+      setShowPrivacy(true);
+    }
+  };
+
+  const handleConfirmPrivacy = () => {
+    sfx.success();
+    acceptPrivacy();
+    if (gpsChecked) {
+      setDeviceLocation(true, { lat: 10.7202, lng: 122.5621 });
+    }
+    setShowPrivacy(false);
+    setShowAuthChoice(true);
+  };
+
+  const enterAs = (mode: "guest" | "user", target: string) => {
+    sfx.success();
+    setSessionMode(mode);
+    setShowAuthChoice(false);
+    navigate(target);
   };
 
   return (
-    <div className="min-vh-100 w-100 d-flex flex-column justify-content-between px-4 px-xl-5 py-4">
-      <div className="d-flex justify-content-between align-items-center">
-        <span className="md-condensed-display fs-4" style={{ letterSpacing: "0.14em" }}>
-          MOSS <span className="md-moss-accent">&amp;</span> DAISY
-        </span>
-        <span className="small" style={{ color: "var(--md-text-muted)", letterSpacing: "0.12em" }}>
-          ILOILO &bull; PHILIPPINES
-        </span>
-      </div>
+    <div className="min-vh-100 d-flex flex-column justify-content-between position-relative overflow-hidden"
+      style={{
+        background: "radial-gradient(circle at 18% 22%, rgba(79, 111, 55, 0.24) 0%, transparent 45%), radial-gradient(circle at 82% 75%, rgba(143, 179, 107, 0.18) 0%, transparent 50%), var(--md-canvas)",
+      }}>
+      <Container fluid className="px-4 px-xl-5 py-4 my-auto position-relative" style={{ zIndex: 2 }}>
+        {/* Minimalist Top Crest (No Navbar / No Header) */}
+        <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-2"
+          style={{ borderBottom: "1px solid var(--md-line)" }}>
+          <div className="d-flex align-items-center gap-2">
+            <span className="px-3 py-1 rounded-pill small fw-bold"
+              style={{ background: "var(--md-moss-soft)", color: "var(--md-moss)", border: "1px solid var(--md-moss)" }}>
+              &bull; LIVE KITCHEN &bull; ILOILO &amp; MANILA
+            </span>
+            <span className="small d-none d-md-inline" style={{ color: "var(--md-text-muted)" }}>
+              Bespoke Farm-to-Bowl Filipino Nutrition
+            </span>
+          </div>
+          <button type="button" className="md-btn-ghost py-1 px-3 small"
+            onClick={() => {
+              const next = !soundOn;
+              setSoundOn(next);
+              sfx.setEnabled(next);
+              if (next) sfx.success();
+            }}>
+            {soundOn ? <><VolumeUpFill className="me-1" /> System Sounds ON</> : <><VolumeMuteFill className="me-1" /> Sounds Muted</>}
+          </button>
+        </div>
 
-      <Container fluid className="my-auto py-4 px-0">
         <Row className="align-items-center g-5">
+          {/* Left Column: Brand Story, Interactive Tasting Reel & Get Started CTA */}
           <Col lg={6}>
-            <div className="text-uppercase small mb-3 md-moss-accent fw-semibold" style={{ letterSpacing: "0.22em" }}>
-              TRANSPARENT HEALTHY FOOD DELIVERY
+            <div className="text-uppercase small fw-bold md-moss-accent mb-2" style={{ letterSpacing: "0.22em" }}>
+              MOSS &amp; DAISY &bull; BESPOKE HEALTHY KITCHEN
             </div>
-            <h1 className="md-serif-display mb-4" style={{ fontSize: "clamp(3rem, 5.5vw, 5.2rem)" }}>
-              Know what is on your <span className="md-moss-accent fst-italic">plate</span>.
+            <h1 className="md-serif-display display-3 fw-bold mb-3" style={{ lineHeight: 1.06 }}>
+              Craft Your Plate.<br />
+              <span className="md-moss-accent">Levitate Every Layer.</span>
             </h1>
-            <p className="mb-4 fs-6" style={{ color: "var(--md-text-muted)", maxWidth: "54ch", lineHeight: 1.7 }}>
-              Every dish can be tossed apart to reveal its physical ingredients and nutrition. Customize your plate live on screen and see your exact Philippine Peso price update with every edit.
+            <p className="lead mb-4" style={{ color: "var(--md-text-muted)", maxWidth: 610 }}>
+              Customize authentic Filipino power bowls, artisan sourdough clubs, and nourishing broths with real-time PHP ingredient pricing, USDA/PhilFCT macros, and 3D deconstructed food inspection.
             </p>
-            <div className="d-flex flex-wrap align-items-center gap-3 mb-5">
-              <button type="button" className="md-btn-pill px-5 py-3 fs-6" onClick={handleGetStarted}>
-                Get Started <ArrowRight />
-              </button>
-            </div>
-            {declineNote && (
-              <div className="small text-warning mb-3">
-                Please accept the Privacy Notice when ready to continue.
-              </div>
-            )}
 
-            <Row className="g-4 pt-4 border-top" style={{ borderColor: "var(--md-line)" }}>
-              <Col xs={4}>
-                <div className="md-condensed-display fs-2 md-moss-accent">12,400+</div>
-                <div className="small" style={{ color: "var(--md-text-muted)" }}>Active Users</div>
-              </Col>
-              <Col xs={4}>
-                <div className="mb-1"><StarRating value={4.8} size={18} /></div>
-                <div className="small" style={{ color: "var(--md-text-muted)" }}>Average Rating</div>
-              </Col>
-              <Col xs={4}>
-                <div className="md-condensed-display fs-2 md-moss-accent">1,850+</div>
-                <div className="small" style={{ color: "var(--md-text-muted)" }}>Orders / Day</div>
-              </Col>
-            </Row>
-          </Col>
-
-          <Col lg={6}>
-            <div className="p-4 p-xl-5 rounded-4 border" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                  <div className="small text-uppercase md-moss-accent fw-bold" style={{ letterSpacing: "0.14em" }}>Interactive Plate Preview</div>
-                  <div className="h5 mb-0">{sampleDish.name}</div>
-                </div>
-                <div className="text-end">
-                  <div className="fs-3 fw-bold md-moss-accent">&#8369;{totals.unitPricePhp}</div>
-                  <div className="small" style={{ color: "var(--md-text-muted)" }}>{totals.kcal} kcal &bull; {totals.proteinG}g P</div>
-                </div>
+            {/* Interactive Tasting Reel Switcher */}
+            <div className="mb-4">
+              <div className="small text-uppercase fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--md-text-muted)" }}>
+                <Stars className="me-1 md-moss-accent" /> Interactive Tasting Preview (Click a Dish to Inspect):
               </div>
-              <div className="md-plate-stage md-vessel-wooden-bowl my-3">
-                {activeIngs.map((ing) => (
-                  <div key={ing.id} className="md-plate-ingredient-chip"
-                    style={{ top: ing.plateSlot.top, left: ing.plateSlot.left, zIndex: ing.plateSlot.layer }}>
-                    <SmartAssetImage folderPath={ing.folderPath} alt={ing.name} style={{ width: 34, height: 34 }} />
-                    <span className="fw-semibold text-truncate w-100" style={{ fontSize: "0.58rem" }}>{ing.name.split(" ").slice(-1)[0]}</span>
-                    <span className="md-moss-accent fw-bold" style={{ fontSize: "0.58rem" }}>&#8369;{ing.pricePhp}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="d-flex flex-wrap justify-content-center gap-2 mt-3">
-                {sampleDish.defaultIngredientIds.map((id) => {
-                  const ing = INGREDIENTS_DB[id];
-                  if (!ing) return null;
-                  const on = previewIds.includes(id);
+              <div className="d-flex flex-wrap gap-2">
+                {showcaseDishes.map((d, i) => {
+                  const active = i === selectedDishIdx;
                   return (
-                    <button key={id} type="button"
-                      className={on ? "md-btn-pill py-1 px-3 small" : "md-btn-ghost py-1 px-3 small"}
-                      onClick={() => {
-                        if (on && previewIds.length > 2) setPreviewIds(previewIds.filter((x) => x !== id));
-                        else if (!on) setPreviewIds([...previewIds, id]);
-                      }}>
-                      {ing.name} ({on ? "-\u20B1" : "+\u20B1"}{ing.pricePhp})
+                    <button key={d.id} type="button"
+                      className={active ? "md-btn-pill py-2 px-3 small" : "md-btn-ghost py-2 px-3 small"}
+                      onClick={() => { sfx.toss(); setSelectedDishIdx(i); }}>
+                      {d.name.split(" ").slice(0, 3).join(" ")}
                     </button>
                   );
                 })}
               </div>
             </div>
+
+            {/* Primary Actions */}
+            <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+              <button type="button" className="md-btn-pill py-3 px-5 fs-5" onClick={handleGetStarted}>
+                Get Started &rarr;
+              </button>
+              <button type="button" className="md-btn-ghost py-3 px-4"
+                onClick={() => { sfx.toss(); setIsDismantled((v) => !v); }}>
+                {isDismantled ? "Show Plated Presentation" : "Try 3D Dismantle Stack"}
+              </button>
+            </div>
+
+            {/* Live Key Metrics Grid */}
+            <Row className="g-3 mb-4">
+              <Col xs={6} sm={3}>
+                <div className="md-surface-card p-3 text-center">
+                  <div className="h4 fw-bold md-moss-accent mb-0">18</div>
+                  <div className="small" style={{ color: "var(--md-text-muted)" }}>Chef Dishes</div>
+                </div>
+              </Col>
+              <Col xs={6} sm={3}>
+                <div className="md-surface-card p-3 text-center">
+                  <div className="h4 fw-bold md-moss-accent mb-0">61</div>
+                  <div className="small" style={{ color: "var(--md-text-muted)" }}>Whole Ingredients</div>
+                </div>
+              </Col>
+              <Col xs={6} sm={3}>
+                <div className="md-surface-card p-3 text-center">
+                  <div className="d-flex justify-content-center mb-1"><StarRating value={4.9} size={13} /></div>
+                  <div className="small" style={{ color: "var(--md-text-muted)" }}>4.9 Avg Rating</div>
+                </div>
+              </Col>
+              <Col xs={6} sm={3}>
+                <div className="md-surface-card p-3 text-center">
+                  <div className="h4 fw-bold md-moss-accent mb-0">25m</div>
+                  <div className="small" style={{ color: "var(--md-text-muted)" }}>Live GPS Delivery</div>
+                </div>
+              </Col>
+            </Row>
+
+            {/* Verified Review Ribbon */}
+            <div className="md-surface-card p-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div className="d-flex align-items-center gap-2">
+                <StarRating value={5} size={14} />
+                <span className="small fw-semibold">&ldquo;The 3D Dismantle view and live macro pricing are game-changers!&rdquo;</span>
+              </div>
+              <span className="small md-moss-accent fw-bold">&mdash; Verified Iloilo &amp; USA Campus Order</span>
+            </div>
+          </Col>
+
+          {/* Right Column: Interactive Studio Plated & 3D Levitating Dismantle Stage */}
+          <Col lg={6}>
+            <div className="md-surface-card p-4 position-relative">
+              <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                <div>
+                  <Badge bg="success" className="me-2"><CheckCircleFill className="me-1" /> Live Interactive Preview</Badge>
+                  <span className="fw-bold">{activeDish.name}</span>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="h5 fw-bold md-moss-accent mb-0">&#8369;{totals.unitPricePhp}</span>
+                  <span className="small px-2 py-1 rounded-pill" style={{ background: "var(--md-surface-2)" }}>
+                    <Fire className="md-moss-accent" /> {totals.kcal} kcal &bull; {totals.proteinG}g Protein
+                  </span>
+                </div>
+              </div>
+
+              <FoodPresentationStage
+                dish={activeDish}
+                selectedIds={activeDish.defaultIngredientIds}
+                isDismantled={isDismantled}
+                onToggleDismantle={() => { sfx.toss(); setIsDismantled((v) => !v); }}
+              />
+            </div>
           </Col>
         </Row>
       </Container>
 
-      <div className="d-flex justify-content-between small pt-3 border-top" style={{ borderColor: "var(--md-line)", color: "var(--md-text-muted)" }}>
-        <span>Know what is on your plate.</span>
-        <span>RA 10173 Privacy Compliant</span>
-      </div>
-
-      <Modal show={privacyOpen} backdrop="static" centered>
-        <Modal.Header style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <Modal.Title className="md-condensed-display fs-4"><ShieldCheck className="md-moss-accent me-2" />PRIVACY NOTICE (RA 10173)</Modal.Title>
+      {/* Step 1: RA 10173 Privacy & Device Geolocation Notice Modal */}
+      <Modal show={showPrivacy} onHide={() => setShowPrivacy(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="h5 fw-bold">
+            <ShieldCheck className="md-moss-accent me-2" />
+            Data Privacy &amp; Live GPS Notice (RA 10173)
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <p className="small mb-0">
-            In compliance with the Philippine Data Privacy Act of 2012 (RA 10173), Moss &amp; Daisy collects your name, contact details, delivery address, order history, and checks your Device Geolocation so we can verify your drop-off point and display real-time Live Driver Location updates while your order is on the way.
+        <Modal.Body>
+          <p className="small mb-2">
+            Welcome to <strong>Moss &amp; Daisy</strong>. In compliance with the <strong>Philippine Data Privacy Act of 2012 (RA 10173)</strong>, we protect your personal profile, dietary preferences, and delivery history.
           </p>
+          <p className="small mb-3" style={{ color: "var(--md-text-muted)" }}>
+            <GeoAltFill className="md-moss-accent me-1" />
+            <strong>Device Geolocation &amp; Live Driver Tracking:</strong> Before dispatching an order, we verify that your device location is turned ON so you can track our assigned rider&apos;s live GPS route, vehicle model, and plate number in real time.
+          </p>
+          <Form.Check type="checkbox" id="privacy-consent-chk" className="mb-2 small fw-semibold"
+            checked={consentChecked} onChange={(e) => { sfx.click(); setConsentChecked(e.target.checked); }}
+            label="I agree to the RA 10173 Privacy Notice and customized nutrition storage." />
+          <Form.Check type="checkbox" id="gps-consent-chk" className="small fw-semibold"
+            checked={gpsChecked} onChange={(e) => { sfx.click(); setGpsChecked(e.target.checked); }}
+            label="Enable Device Location (GPS ON) for accurate Iloilo & PH delivery tracking." />
         </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: "var(--md-surface)" }}>
-          <button type="button" className="md-btn-ghost" onClick={() => { setPrivacyOpen(false); setDeclineNote(true); }}>Decline</button>
-          <button type="button" className="md-btn-pill" onClick={() => { acceptConsent(); setPrivacyOpen(false); setAuthChoiceOpen(true); }}>I Agree &amp; Continue</button>
+        <Modal.Footer>
+          <button type="button" className="md-btn-pill w-100 justify-content-center py-2"
+            disabled={!consentChecked} onClick={handleConfirmPrivacy}>
+            Accept &amp; Continue
+          </button>
         </Modal.Footer>
       </Modal>
 
-      <Modal show={authChoiceOpen} onHide={() => setAuthChoiceOpen(false)} centered>
-        <Modal.Header closeButton style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <Modal.Title className="md-condensed-display fs-4">CONTINUE TO MOSS &amp; DAISY</Modal.Title>
+      {/* Step 2: New-Device Account Choice Modal */}
+      <Modal show={showAuthChoice} onHide={() => setShowAuthChoice(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="h5 fw-bold">How Would You Like to Order?</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ backgroundColor: "var(--md-surface)", color: "var(--md-text)" }}>
-          <div className="d-grid gap-2">
-            <button type="button" className="md-btn-pill justify-content-center" onClick={() => navigate("/auth/sign-up")}>Create an Account</button>
-            <button type="button" className="md-btn-ghost" onClick={() => navigate("/auth/sign-in")}>Sign In</button>
-            <button type="button" className="md-btn-ghost" onClick={() => { setSessionMode("guest"); navigate("/home"); }}>Continue as Guest</button>
-          </div>
+        <Modal.Body className="d-grid gap-3">
+          <button type="button" className="md-btn-pill py-3 justify-content-center"
+            onClick={() => enterAs("user", "/auth")}>
+            <PersonPlusFill className="me-2" /> Create an Account (Save Plates &amp; Addresses)
+          </button>
+          <button type="button" className="md-btn-ghost py-3 justify-content-center"
+            onClick={() => enterAs("user", "/auth")}>
+            <BoxArrowInRight className="me-2" /> Sign In to Existing Account
+          </button>
+          <button type="button" className="md-btn-ghost py-2 justify-content-center small"
+            onClick={() => enterAs("guest", "/home")}>
+            <PersonBadge className="me-2" /> Continue as Guest to Home Page
+          </button>
         </Modal.Body>
       </Modal>
     </div>

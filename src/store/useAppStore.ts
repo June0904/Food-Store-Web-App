@@ -68,6 +68,8 @@ interface AppState {
   deliveryHistory: DeliveryRecord[];
   reviews: ReviewEntry[];
   unavailableFoodIds: string[];
+  privacyAccepted: boolean;
+  acceptPrivacy: () => void;
   toggleFoodAvailability: (dishId: string) => void;
   toggleTheme: () => void;
   setPreviewDevice: (mode: "auto" | "desktop" | "mobile") => void;
@@ -168,6 +170,8 @@ export const useAppStore = create<AppState>()(
       cartOpen: false,
       confirmAddressOpen: false,
       deliveryHistory: SEED_HISTORY,
+      privacyAccepted: false,
+      acceptPrivacy: () => set({ privacyAccepted: true }),
       unavailableFoodIds: ['artisanal-halo-halo-lite', 'crispy-camote-herb-wedges'],
       toggleFoodAvailability: (dishId) => set((s) => ({ unavailableFoodIds: s.unavailableFoodIds.includes(dishId) ? s.unavailableFoodIds.filter((id) => id !== dishId) : [...s.unavailableFoodIds, dishId] })),
       reviews: [
@@ -220,7 +224,9 @@ export const useAppStore = create<AppState>()(
       },
       addReview: (dishId, rating, comment) =>
         set((s) => ({
-          unavailableFoodIds: ['artisanal-halo-halo-lite', 'crispy-camote-herb-wedges'],
+          privacyAccepted: false,
+      acceptPrivacy: () => set({ privacyAccepted: true }),
+      unavailableFoodIds: ['artisanal-halo-halo-lite', 'crispy-camote-herb-wedges'],
       toggleFoodAvailability: (dishId) => set((s) => ({ unavailableFoodIds: s.unavailableFoodIds.includes(dishId) ? s.unavailableFoodIds.filter((id) => id !== dishId) : [...s.unavailableFoodIds, dishId] })),
       reviews: [
             { id: "rev-" + Date.now(), dishId, userName: s.userProfile.name, rating, comment, createdAt: "Just now" },

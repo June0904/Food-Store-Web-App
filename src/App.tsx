@@ -1,3 +1,4 @@
+import { GlobalExperience } from "./components/ui/GlobalExperience";
 import { DeliveryTrackerPage } from "./pages/DeliveryTrackerPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppShell } from "./shell/AppShell";
@@ -9,7 +10,7 @@ import { AboutPage, ContactPage, ProfileHistoryPage, SettingsPage, AuthPage } fr
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter><GlobalExperience />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route element={<AppShell />}>

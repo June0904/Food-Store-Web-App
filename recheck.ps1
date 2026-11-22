@@ -8,7 +8,7 @@ $RequiredFiles = @(
   "src\main.tsx", "src\App.tsx", "src\styles\tokens.scss", "src\types\menu.ts",
   "src\data\customImageMap.ts", "src\data\ingredientsData.ts", "src\data\menuData.ts",
   "src\components\ui\SmartAssetImage.tsx", "src\components\ui\StarRating.tsx",
-  "src\components\ui\AnimatedStepper.tsx", "src\hooks\useIsMobile.ts",
+  "src\components\ui\AnimatedStepper.tsx", "src\components\ui\FoodPresentationStage.tsx", "src\components\ui\SaleFeatureBanner.tsx", "src\components\ui\GlobalExperience.tsx", "src\hooks\useIsMobile.ts",
   "src\store\useAppStore.ts", "src\shell\AppShell.tsx", "src\lib\soundEffects.ts",
   "src\pages\LandingPage.tsx", "src\pages\HomePage.tsx", "src\pages\MenuPage.tsx",
   "src\pages\ProductCustomizerPage.tsx", "src\pages\SecondaryPages.tsx",
