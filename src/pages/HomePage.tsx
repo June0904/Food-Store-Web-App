@@ -1,3 +1,4 @@
+import { SaleFeatureBanner } from "../components/ui/SaleFeatureBanner";
 import { StarRating } from "../components/ui/StarRating";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -30,7 +31,7 @@ export function HomePage() {
   };
 
   return (
-    <Container fluid className="px-4 px-xl-5 py-4">
+    <Container fluid className="px-4 px-xl-5 py-4"><SaleFeatureBanner />
       {/* Rubric Featured Spotlight Hero with CTA & Link to Product Page */}
       <div className="md-wordmark-stage mb-5">
         <div className="md-giant-wordmark">FRESH</div>

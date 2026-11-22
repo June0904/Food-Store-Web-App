@@ -1,3 +1,4 @@
+import { SaleFeatureBanner } from "../components/ui/SaleFeatureBanner";
 import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Badge, Form } from "react-bootstrap";
@@ -44,6 +45,7 @@ export function MenuPage() {
         </button>
       </div>
 
+      <SaleFeatureBanner />
       {/* Category Tiles */}
       <Row className="g-3 mb-4">
         {categories.map((slug) => {
