@@ -36,12 +36,12 @@ export function LandingPage() {
 
   const handleConfirmPrivacy = () => {
     sfx.success();
-    acceptPrivacy();
-    if (gpsChecked) {
-      setDeviceLocation(true, { lat: 10.7202, lng: 122.5621 });
-    }
     setShowPrivacy(false);
     setShowAuthChoice(true);
+    if (typeof acceptPrivacy === "function") acceptPrivacy();
+    if (gpsChecked && typeof setDeviceLocation === "function") {
+      setDeviceLocation(true, { lat: 10.7202, lng: 122.5621 });
+    }
   };
 
   const enterAs = (mode: "guest" | "user", target: string) => {
