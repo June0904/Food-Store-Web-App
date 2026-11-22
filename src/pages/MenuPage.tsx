@@ -23,7 +23,7 @@ export function MenuPage() {
   });
 
   return (
-    <Container className="py-4">
+    <Container fluid className="px-4 px-xl-5 py-4">
       <div className="text-center mb-4">
         <h1 className="md-instant-heading h2">SHOP &amp; CUSTOMIZABLE MENU</h1>
         <p className="small mb-0" style={{ color: "var(--md-text-muted)" }}>
@@ -85,7 +85,7 @@ export function MenuPage() {
         {filtered.map((item) => {
           const totals = calculateDishTotals(item, item.defaultIngredientIds, 1);
           return (
-            <Col sm={6} lg={4} key={item.id}>
+            <Col sm={6} lg={3} key={item.id}>
               <div className="md-surface-card p-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div className="position-relative mb-3">

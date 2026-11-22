@@ -1,3 +1,4 @@
+import { StarRating } from "../components/ui/StarRating";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Badge, Form } from "react-bootstrap";
@@ -29,7 +30,7 @@ export function HomePage() {
   };
 
   return (
-    <Container className="py-4">
+    <Container fluid className="px-4 px-xl-5 py-4">
       {/* Rubric Featured Spotlight Hero with CTA & Link to Product Page */}
       <div className="md-wordmark-stage mb-5">
         <div className="md-giant-wordmark">FRESH</div>
@@ -120,7 +121,7 @@ export function HomePage() {
           {healthyPicks.map((item) => {
             const totals = calculateDishTotals(item, item.defaultIngredientIds, 1);
             return (
-              <Col md={6} lg={4} key={item.id}>
+              <Col md={6} lg={3} key={item.id}>
                 <div className="md-surface-card p-3 h-100 d-flex flex-column justify-content-between">
                   <div>
                     <div className="d-flex align-items-center gap-3 mb-2">
@@ -239,7 +240,7 @@ export function HomePage() {
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label className="small fw-semibold">Rating ({reviewRating} Stars)</Form.Label>
-                  <Form.Range min={1} max={5} value={reviewRating} onChange={(e) => setReviewRating(Number(e.target.value))} />
+                  <div><StarRating value={reviewRating} onChange={setReviewRating} size={22} /></div>
                 </Form.Group>
                 <Form.Group className="mb-2">
                   <Form.Label className="small fw-semibold">Your Comment</Form.Label>

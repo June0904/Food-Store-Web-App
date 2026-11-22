@@ -70,7 +70,7 @@ export function AppShell() {
   ];
 
   return (
-    <div className="min-vh-100 d-flex flex-column" style={{ paddingBottom: isMobile ? "72px" : "0" }}>
+    <div className="min-vh-100 d-flex flex-column $(isMobile ? 'md-mobile-frame' : 'w-100')" style={{ paddingBottom: isMobile ? "72px" : "0" }}>
       {/* Top Utility & Device Preview Switcher Bar */}
       <div className="py-1 px-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2"
         style={{ backgroundColor: "#121412", color: "#F4F2EA", borderColor: "#343A33", fontSize: "0.73rem" }}>
@@ -94,7 +94,7 @@ export function AppShell() {
 
       {/* Persistent Top Navbar */}
       <Navbar className="py-2 border-bottom sticky-top" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
-        <Container className="d-flex align-items-center justify-content-between">
+        <Container fluid className="px-4 px-xl-5 d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center gap-2">
             <button type="button" className="md-btn-ghost p-2" aria-label="Toggle navigation panel" onClick={() => setNavDrawerOpen(true)}>
               <List size={18} />
@@ -152,7 +152,7 @@ export function AppShell() {
 
       {/* 3-Column Editorial Footer */}
       <footer className="mt-5 py-4 border-top" style={{ backgroundColor: "var(--md-surface)", borderColor: "var(--md-line)" }}>
-        <Container>
+        <Container fluid className="px-4 px-xl-5">
           <Row className="g-4">
             <Col md={4}>
               <div className="md-condensed-display fs-4 mb-1">MOSS <span className="md-moss-accent">&amp;</span> DAISY</div>
@@ -172,7 +172,7 @@ export function AppShell() {
             <Col md={4}>
               <div className="fw-bold small text-uppercase mb-1">Iloilo City Kitchen Hub</div>
               <div className="small" style={{ color: "var(--md-text-muted)" }}>
-                Gen. Luna St., Iloilo City, Philippines &bull; +63 917 555 0199 &bull; RA 10173 Data Privacy Compliant
+                Gen. Luna St., Iloilo City, Philippines &bull; 09458269961 &bull; ilczar9@gmail.com &bull; RA 10173 Data Privacy Compliant
               </div>
             </Col>
           </Row>

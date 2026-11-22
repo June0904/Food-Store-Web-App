@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import "./styles/tokens.scss";
 import { AppShell } from "./shell/AppShell";
 import { LandingPage } from "./pages/LandingPage";
 import { HomePage } from "./pages/HomePage";
@@ -11,8 +10,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route element={<AppShell />}>
-          <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
           <Route path="/shop" element={<MenuPage />} />

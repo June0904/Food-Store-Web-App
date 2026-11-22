@@ -53,7 +53,7 @@ export function ProductCustomizerPage() {
   };
 
   return (
-    <Container className="py-4">
+    <Container fluid className="px-4 px-xl-5 py-4">
       <div className="md-surface-card p-4">
         <Row className="g-4 align-items-start">
           {/* Live Visual Plate / Bowl / Bento-Box / Soup Bowl / Drink Cup */}
