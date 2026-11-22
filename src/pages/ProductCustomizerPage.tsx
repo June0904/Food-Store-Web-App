@@ -71,7 +71,7 @@ export function ProductCustomizerPage() {
               ))}
             </div>
 
-            <div className={`md-plate-stage md-vessel-${vessel}`}>
+            <FoodPresentationStage dish={dish} selectedIds={selectedIds} isDismantled={isTossed} onToggleDismantle={() => { sfx.toss(); setIsTossed((v) => !v); }} /><div style={{ display: "none" }}
               {dish.kind === "drink" ? (
                 <SmartAssetImage folderPath={dish.folderPath} alt={dish.name} style={{ width: 140, height: 140, borderRadius: 20 }} />
               ) : (
