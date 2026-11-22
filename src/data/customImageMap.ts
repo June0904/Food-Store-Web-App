@@ -85,3 +85,6 @@ export const CUSTOM_IMAGE_MAP: Record<string, string> = {
   "ingredients/vegetables/steamed-broccoli": "/images/ingredients/vegetables/steamed-broccoli/photo.png",
   "ingredients/vegetables/winged-beans-sigarilyas": "/images/ingredients/vegetables/winged-beans-sigarilyas/photo.png",
 };
+export function resolveAssetImage(folderPath: string): string {
+  return CUSTOM_IMAGE_MAP[folderPath] ?? "/images/" + folderPath + "/preview.svg";
+}

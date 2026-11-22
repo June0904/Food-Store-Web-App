@@ -1,3 +1,4 @@
+import { FoodPresentationStage } from "../components/ui/FoodPresentationStage";
 import { AnimatedStepper } from "../components/ui/AnimatedStepper";
 import { sfx } from "../lib/soundEffects";
 import { useState } from "react";
@@ -182,7 +183,7 @@ export function ProductCustomizerPage() {
                 <button type="button" className="md-btn-ghost flex-grow-1" onClick={() => navigate(`/menu/${dish.category}`)}>
                   Cancel
                 </button>
-                <div className="d-flex flex-wrap align-items-center gap-2 me-2"><AnimatedStepper value={quantity} onChange={setQuantity} min={1} max={20} /><button type="button" className="md-btn-ghost py-1 px-3 small" onClick={() => { sfx.toss(); setIsTossed((v) => !v); }}>{isTossed ? "Gather Plate" : "Toss Plate Apart"}</button></div><button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart} disabled={isUnavailable} style={{ opacity: isUnavailable ? 0.5 : 1 }}>
+                <div className="d-flex flex-wrap align-items-center gap-2 me-2"><AnimatedStepper value={quantity} onChange={setQuantity} min={1} max={20} /><button type="button" className="md-btn-ghost py-1 px-3 small" onClick={() => { sfx.toss(); setIsTossed((v) => !v); }}>{isTossed ? "Presentation View" : "Dismantle Food (Toss Plate Apart)"}</button></div><button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart} disabled={isUnavailable} style={{ opacity: isUnavailable ? 0.5 : 1 }}>
                   {isUnavailable ? "Currently Unavailable" : <><BagPlusFill /> Add to Cart (&#8369;{totals.totalPricePhp})</>}
                 </button>
               </div>
