@@ -10,7 +10,7 @@ import { SmartAssetImage } from "../components/ui/SmartAssetImage";
 export function ProductCustomizerPage() {
   const { slug } = useParams<{ category: string; slug: string }>();
   const navigate = useNavigate();
-  const { addToCart, setCartOpen } = useAppStore();
+  const { addToCart, setCartOpen, unavailableFoodIds, toggleFoodAvailability } = useAppStore();
 
   const dish = MENU_ITEMS.find((m) => m.slug === slug) ?? MENU_ITEMS[0];
   const [vessel, setVessel] = useState<VesselType>(dish.vessel);
@@ -19,6 +19,7 @@ export function ProductCustomizerPage() {
   const [guardMsg, setGuardMsg] = useState<string | null>(null);
 
   const totals = calculateDishTotals(dish, selectedIds, quantity);
+  const isUnavailable = unavailableFoodIds.includes(dish.id);
   const activeIngredients = selectedIds.map((id) => INGREDIENTS_DB[id]).filter(Boolean);
 
   const toggleIngredient = (ingId: string, cat: DishIngredientCategory) => {
@@ -95,7 +96,7 @@ export function ProductCustomizerPage() {
             <div className="d-flex flex-wrap gap-1 mb-2">
               {dish.healthBadges.map((b) => <Badge key={b} bg="success">{b}</Badge>)}
             </div>
-            <h1 className="h3 mb-2">{dish.name}</h1>
+            <div className="d-flex align-items-center justify-content-between mb-2"><h1 className="h3 mb-0">{dish.name}</h1><button type="button" className="md-btn-ghost py-1 px-2 small" onClick={() => toggleFoodAvailability(dish.id)}>{isUnavailable ? "Unavailable (Click to Enable)" : "Available"}</button></div>
             <p className="small mb-2" style={{ color: "var(--md-text-muted)" }}>{dish.description}</p>
             <div className="small md-moss-accent mb-3"><HeartPulse className="me-1" />{dish.healthyWhy}</div>
 
@@ -179,8 +180,8 @@ export function ProductCustomizerPage() {
                 <button type="button" className="md-btn-ghost flex-grow-1" onClick={() => navigate(`/menu/${dish.category}`)}>
                   Cancel
                 </button>
-                <button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart}>
-                  <BagPlusFill /> Add to Cart (&#8369;{totals.totalPricePhp})
+                <button type="button" className="md-btn-pill flex-grow-1 justify-content-center" onClick={handleAddToCart} disabled={isUnavailable} style={{ opacity: isUnavailable ? 0.5 : 1 }}>
+                  {isUnavailable ? "Currently Unavailable" : <><BagPlusFill /> Add to Cart (&#8369;{totals.totalPricePhp})</>}
                 </button>
               </div>
             </div>

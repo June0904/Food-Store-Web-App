@@ -28,7 +28,7 @@ export function DeliveryTrackerPage() {
 
   useEffect(() => {
     if (stageIdx >= STAGES.length - 1) {
-      if (order) markOrderDelivered(order.orderId);
+      if (order && order.status !== 'Delivered') markOrderDelivered(order.orderId);
       return;
     }
     const timer = setInterval(() => {
@@ -41,7 +41,7 @@ export function DeliveryTrackerPage() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [stageIdx, order, markOrderDelivered]);
+  }, [stageIdx, order?.orderId, order?.status, markOrderDelivered]);
 
   if (!order) return null;
 

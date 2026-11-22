@@ -67,6 +67,8 @@ interface AppState {
   confirmAddressOpen: boolean;
   deliveryHistory: DeliveryRecord[];
   reviews: ReviewEntry[];
+  unavailableFoodIds: string[];
+  toggleFoodAvailability: (dishId: string) => void;
   toggleTheme: () => void;
   setPreviewDevice: (mode: "auto" | "desktop" | "mobile") => void;
   acceptConsent: () => void;
@@ -166,6 +168,8 @@ export const useAppStore = create<AppState>()(
       cartOpen: false,
       confirmAddressOpen: false,
       deliveryHistory: SEED_HISTORY,
+      unavailableFoodIds: ['artisanal-halo-halo-lite', 'crispy-camote-herb-wedges'],
+      toggleFoodAvailability: (dishId) => set((s) => ({ unavailableFoodIds: s.unavailableFoodIds.includes(dishId) ? s.unavailableFoodIds.filter((id) => id !== dishId) : [...s.unavailableFoodIds, dishId] })),
       reviews: [
         { id: "r1", dishId: "chicken-inasal-power-bowl", userName: "Marco V.", rating: 5, comment: "Love watching the bowl update as I swap white rice for quinoa-adlai!", createdAt: "2 hours ago" },
         { id: "r2", dishId: "la-paz-batchoy", userName: "Clarisse T.", rating: 5, comment: "Authentic Iloilo batchoy and removing chicharon lowered the price and calories right away.", createdAt: "Yesterday" },
@@ -174,7 +178,7 @@ export const useAppStore = create<AppState>()(
       setPreviewDevice: (previewDevice) => set({ previewDevice }),
       acceptConsent: () => set({ consentAccepted: true }),
       setDeviceLocation: (enabled, coords) => set((s) => ({ deviceLocationEnabled: enabled, deviceCoords: coords ?? s.deviceCoords })),
-      markOrderDelivered: (orderId) => set((s) => ({ deliveryHistory: s.deliveryHistory.map((o) => o.orderId === orderId ? { ...o, status: 'Delivered' } : o) })),
+      markOrderDelivered: (orderId) => set((s) => { const target = s.deliveryHistory.find((o) => o.orderId === orderId); if (!target || target.status === 'Delivered') return s; return { deliveryHistory: s.deliveryHistory.map((o) => o.orderId === orderId ? { ...o, status: 'Delivered' } : o) }; }),
       setSessionMode: (sessionMode) => set({ sessionMode }),
       updateProfile: (patch) => set((s) => ({ userProfile: { ...s.userProfile, ...patch } })),
       addAddress: (addr) =>
@@ -216,7 +220,9 @@ export const useAppStore = create<AppState>()(
       },
       addReview: (dishId, rating, comment) =>
         set((s) => ({
-          reviews: [
+          unavailableFoodIds: ['artisanal-halo-halo-lite', 'crispy-camote-herb-wedges'],
+      toggleFoodAvailability: (dishId) => set((s) => ({ unavailableFoodIds: s.unavailableFoodIds.includes(dishId) ? s.unavailableFoodIds.filter((id) => id !== dishId) : [...s.unavailableFoodIds, dishId] })),
+      reviews: [
             { id: "rev-" + Date.now(), dishId, userName: s.userProfile.name, rating, comment, createdAt: "Just now" },
             ...s.reviews,
           ],
