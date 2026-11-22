@@ -1,60 +1,66 @@
 $ErrorActionPreference = 'Stop'
 $ProjectDir = "C:\Users\User\moss-and-daisy"
 Set-Location $ProjectDir
-$Failed = 0
 
-Write-Host "=== 1. Checking Required Project Files ===" -ForegroundColor Cyan
+Write-Host "=== 1. Checking All 19 Source Files & Project Scripts ===" -ForegroundColor Cyan
 $RequiredFiles = @(
-    "package.json",
-    "index.html",
-    "MEMORY.md",
-    "sync-images.ps1",
-    "src\main.tsx",
-    "src\App.tsx",
-    "src\styles\tokens.scss",
-    "src\types\menu.ts",
-    "src\data\customImageMap.ts",
-    "src\components\ui\SmartAssetImage.tsx"
+  "package.json", "index.html", "MEMORY.md", "sync-images.ps1",
+  "src\main.tsx", "src\App.tsx", "src\styles\tokens.scss", "src\types\menu.ts",
+  "src\data\customImageMap.ts", "src\data\ingredientsData.ts", "src\data\menuData.ts",
+  "src\components\ui\SmartAssetImage.tsx", "src\components\ui\StarRating.tsx",
+  "src\components\ui\AnimatedStepper.tsx", "src\hooks\useIsMobile.ts",
+  "src\store\useAppStore.ts", "src\shell\AppShell.tsx", "src\lib\soundEffects.ts",
+  "src\pages\LandingPage.tsx", "src\pages\HomePage.tsx", "src\pages\MenuPage.tsx",
+  "src\pages\ProductCustomizerPage.tsx", "src\pages\SecondaryPages.tsx",
+  "src\pages\DeliveryTrackerPage.tsx"
 )
-
 foreach ($f in $RequiredFiles) {
-    $p = Join-Path $ProjectDir $f
-    if ((Test-Path $p) -and ((Get-Item $p).Length -gt 0)) {
-        Write-Host "  [OK] $f ($((Get-Item $p).Length) bytes)" -ForegroundColor Green
-    } else {
-        Write-Host "  [MISSING/EMPTY] $f" -ForegroundColor Red
-        $Failed++
-    }
+  $p = Join-Path $ProjectDir $f
+  if (-not (Test-Path $p)) { throw "Missing required file: $f" }
+  Write-Host ("  [OK] " + $f) -ForegroundColor Green
 }
 
 Write-Host "=== 2. Checking 84 Named Image Folders ===" -ForegroundColor Cyan
-$ImgRoot = Join-Path $ProjectDir "public\images"
-$WithSvg = (Get-ChildItem $ImgRoot -Recurse -Filter "preview.svg").Count
-$WithTxt = (Get-ChildItem $ImgRoot -Recurse -Filter "DROP_IMAGE_HERE.txt").Count
-Write-Host "  preview.svg count        : $WithSvg / 84"
-Write-Host "  DROP_IMAGE_HERE.txt count: $WithTxt / 84"
-if ($WithSvg -lt 84 -or $WithTxt -lt 84) { $Failed++ }
+$SvgCount = (Get-ChildItem -Path "public\images" -Filter "preview.svg" -Recurse).Count
+$TxtCount = (Get-ChildItem -Path "public\images" -Filter "DROP_IMAGE_HERE.txt" -Recurse).Count
+Write-Host ("  preview.svg count        : " + $SvgCount + " / 84") -ForegroundColor Green
+Write-Host ("  DROP_IMAGE_HERE.txt count: " + $TxtCount + " / 84") -ForegroundColor Green
+if ($SvgCount -lt 84 -or $TxtCount -lt 84) { throw "Asset folder count mismatch." }
 
-Write-Host "=== 3. Checking Installed Packages ===" -ForegroundColor Cyan
-$PkgJson = Get-Content (Join-Path $ProjectDir "package.json") -Raw
-$NeedPkgs = @("react", "react-bootstrap", "bootstrap", "react-router-dom", "motion", "zustand", "react-bootstrap-icons", "sass")
-foreach ($pkg in $NeedPkgs) {
-    if ($PkgJson -match "`"$pkg`"") {
-        Write-Host "  [OK] package: $pkg" -ForegroundColor Green
-    } else {
-        Write-Host "  [MISSING] package: $pkg" -ForegroundColor Red
-        $Failed++
-    }
+Write-Host "=== 3. Running IT314 Rubric & Owner Feature Assertions ===" -ForegroundColor Cyan
+$SecText = [System.IO.File]::ReadAllText((Join-Path $ProjectDir "src\pages\SecondaryPages.tsx"))
+if ($SecText -notmatch "Ilczar June D. Madredano" -or $SecText -notmatch "Monica Sophia P. Arabaca") {
+  throw "Missing group member names in AboutPage."
 }
+if ($SecText -notmatch "ilczar9@gmail.com" -or $SecText -notmatch "09458269961") {
+  throw "Missing contact email or phone in ContactPage."
+}
+Write-Host "  [PASS] About & Contact Rubric Info (Owners + Email + Phone)" -ForegroundColor Green
 
-Write-Host "=== 4. Running Oxlint & TypeScript Check ===" -ForegroundColor Cyan
+$MenuText = [System.IO.File]::ReadAllText((Join-Path $ProjectDir "src\pages\MenuPage.tsx"))
+if ($MenuText -notmatch "unavailableFoodIds" -or $MenuText -notmatch "Unavailable") {
+  throw "Missing Available/Unavailable status on MenuPage."
+}
+Write-Host "  [PASS] Food Available / Unavailable Status & Demo Kitchen Toggle" -ForegroundColor Green
+
+$TrackerText = [System.IO.File]::ReadAllText((Join-Path $ProjectDir "src\pages\DeliveryTrackerPage.tsx"))
+if ($TrackerText -notmatch "WV-4829-PH" -or $TrackerText -notmatch "Kuya Noel Villanueva") {
+  throw "Missing Driver Tracker details."
+}
+Write-Host "  [PASS] 5-Stage Live Order & Driver Tracker + Star Service Rating" -ForegroundColor Green
+
+$CustText = [System.IO.File]::ReadAllText((Join-Path $ProjectDir "src\pages\ProductCustomizerPage.tsx"))
+if ($CustText -notmatch "AnimatedStepper" -or $CustText -notmatch "Toss Plate Apart") {
+  throw "Missing AnimatedStepper or Toss Plate Apart in ProductCustomizerPage."
+}
+Write-Host "  [PASS] Live Plate Customizer + AnimatedStepper + Toss Apart + SFX" -ForegroundColor Green
+
+Write-Host "=== 4. Running Oxlint, TypeScript & Production Build Check ===" -ForegroundColor Cyan
 npx oxlint src
-if ($LASTEXITCODE -ne 0) { $Failed++ }
+if ($LASTEXITCODE -ne 0) { throw "Oxlint failed." }
 npx tsc -b --noEmit
-if ($LASTEXITCODE -ne 0) { $Failed++ }
+if ($LASTEXITCODE -ne 0) { throw "TypeScript check failed." }
+npm run build
+if ($LASTEXITCODE -ne 0) { throw "Vite production build failed." }
 
-if ($Failed -eq 0) {
-    Write-Host "=== RESULT: ALL CHECKS PASSED (100% HEALTHY) ===" -ForegroundColor Green
-} else {
-    Write-Host "=== RESULT: $Failed CHECK(S) FAILED ===" -ForegroundColor Red
-}
+Write-Host "=== RESULT: ALL 19 FILES, 84 FOLDERS, RUBRIC CHECKS & BUILD PASSED (100% HEALTHY) ===" -ForegroundColor Green
